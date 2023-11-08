@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = new Patient($db);
         if ($user->login($email, $password)) {
             // Przekierowanie do panelu użytkownika
-            header("location: ../Views/patient_panel.php");
+            header("location: ../views/patient_panel.php");
             exit;
         } else {
             // Przekazanie błędu do sesji i przekierowanie z powrotem do formularza logowania

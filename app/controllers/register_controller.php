@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Tuż po wywołaniu execute()
             if ($stmt->execute()) {
                 // Redirect to login page
-                header("Location: login.php");
+                header("Location: ../views/login.php");
                 exit(); // Zatrzymaj wykonanie skryptu
             } else {
                 echo "Execute failed: " . $stmt->errorInfo()[2];
