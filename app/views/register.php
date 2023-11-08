@@ -16,18 +16,15 @@ if (isset($viewData)) {
     // $password nie jest zazwyczaj potrzebne, ponieważ nie powinieneś wyświetlać hasła w formularzu
     $password_err = $viewData['password_err'];
 }
-
-
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rejestracja</title>
-    <link href="../../public/css/styles.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -57,6 +54,7 @@ if (isset($viewData)) {
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Submit">
             </div>
+            <p>Masz konto? <a href="login.php"> Zaloguj się</a></p>
         </form>
     </div>
 </body>

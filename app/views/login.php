@@ -22,7 +22,7 @@
             <div>
                 <input type="submit" value="Zaloguj się">
             </div>
-            <p>Nie masz konta? <a href="register_view.php">Zarejestruj się teraz</a>.</p>
+            <p>Nie masz konta? <a href="register.php"> Zarejestruj się</a></p>
         </form>
     </div>
 </body>

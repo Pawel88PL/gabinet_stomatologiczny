@@ -41,14 +41,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             // Przekazanie błędu do sesji i przekierowanie z powrotem do formularza logowania
             $_SESSION['login_err'] = "Niepoprawny email lub hasło.";
-            header("location: ../Views/login_view.php");
+            header("location: ../views/login.php");
             exit;
         }
     } else {
         // Przekazanie błędów walidacji do sesji
         $_SESSION['email_err'] = $email_err;
         $_SESSION['password_err'] = $password_err;
-        header("location: ../Views/login_view.php");
+        header("location: ../views/login.php");
         exit;
     }
 

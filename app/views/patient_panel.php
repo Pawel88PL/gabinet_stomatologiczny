@@ -22,6 +22,9 @@ echo "Witaj, " . $_SESSION["first_name"] . "!";
 
 <body>
     <h1>Panel pacjenta</h1>
+    <?php
+    echo '<a href="../controllers/logout_controller.php">Wyloguj się</a>';
+    ?>
 </body>
 
 </html>
