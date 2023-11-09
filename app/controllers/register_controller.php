@@ -96,5 +96,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ];
 
     // Załaduj widok i przekaż dane
-    require_once '../Views/register_view.php';
+    require_once '../views/register.php';
 }
