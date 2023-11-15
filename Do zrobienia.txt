@@ -1,0 +1,23 @@
+1. Zarządzanie profilami pacjentów:
+    Umożliw pacjentom przeglądanie i edycję swoich danych osobowych.
+    Dodaj funkcjonalność zmiany hasła.
+
+2. Funkcje zarządzania dentystami:
+    Stwórz interfejs (np. panel administracyjny), gdzie można dodawać i zarządzać profilami dentystów.
+
+3. System zarządzania dostępnością:
+    Stwórz system, który pozwala dentystom określać i zarządzać ich dostępnością dla umawiania wizyt.
+
+4. Rezerwacja wizyt:
+    Zaimplementuj kalendarz dostępności, gdzie pacjenci mogą przeglądać dostępne sloty czasowe i rezerwować wizyty.
+    Umożliw wyświetlanie tylko dostępnych terminów na podstawie harmonogramu dentystów.
+
+5. Przeglądanie i zarządzanie wizytami:
+    Umożliw pacjentom przeglądanie nadchodzących i historycznych wizyt.
+    Zaimplementuj opcję anulowania lub zmiany terminu wizyty.
+
+6. Powiadomienia:
+    Rozważ dodanie funkcji powiadomień email lub SMS o zbliżających się wizytach.
+
+7. Raportowanie i statystyki:
+    Stwórz raporty dla dentystów i pacjentów dotyczące ich wizyt, dostępności i innych kluczowych metryk.
