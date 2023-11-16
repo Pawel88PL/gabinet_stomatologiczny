@@ -1,4 +1,6 @@
 <?php
+
+session_start();
 // Na początku register_view.php
 $first_name = $first_name_err = "";
 $last_name = $last_name_err = "";
