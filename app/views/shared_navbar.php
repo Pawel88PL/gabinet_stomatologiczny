@@ -7,13 +7,17 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="btn btn-light" href="/gabinet/app/views/register.php">Rejestracja</a>
+                    <a class="btn btn-light" href="/gabinet/app/views/patient_register.php">Zarejestruj się!</a>
                 </li>
-                <li class="nav-item">
-                    <a class="btn btn-light" href="/gabinet/app/views/login.php">Logowanie</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-light" href="/gabinet/app/views/patient_panel.php">Panel pacjenta</a>
+                <li class="nav-item dropdown">
+                    <a class="btn btn-light dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Twoje konto
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="/gabinet/app/views/patient_panel.php">Panel pacjenta</a></li>
+                        <li><a class="dropdown-item" href="/gabinet/app/views/dentist_panel.php">Panel dentysty</a></li>
+                        <li><a class="dropdown-item" href="/gabinet/app/views/admin_panel.php">Panel administratora</a></li>
+                    </ul>
                 </li>
             </ul>
             <span class="nav-item">

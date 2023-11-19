@@ -15,15 +15,15 @@ session_start();
 </head>
 
 <body>
-    <?php include 'app/views/navbar.php'; ?>
+    <?php include 'app/views/shared_navbar.php'; ?>
 
     <header class="hero-section m-3">
         <div class="container">
             <h1>DENTLUX</h1>
             <h2>Profesjonalna opieka dentystyczna</h2>
             <h1>Zarezerwuj swoją wizytę</h1>
-            <a href="/gabinet/app/views/register.php" class="btn btn-primary m-2">Zarejestruj się teraz</a>
-            <a href="/gabinet/app/views/login.php" class="btn btn-secondary m-2">Zaloguj się</a>
+            <a href="/gabinet/app/views/patient_register.php" class="btn btn-primary m-2">Zarejestruj się teraz</a>
+            <a href="/gabinet/app/views/patient_login.php" class="btn btn-secondary m-2">Zaloguj się</a>
         </div>
     </header>
 

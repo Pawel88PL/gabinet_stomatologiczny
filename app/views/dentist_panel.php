@@ -1,11 +1,11 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["role"] !== 'patient') {
-    header("location: patient_login.php");
+// Sprawdzanie, czy użytkownik ma uprawnienia administracyjne
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["role"] !== 'dentist') {
+    header("location: dentist_login.php");
     exit;
 }
-
 
 $update_err = "";
 if (isset($_SESSION['update_err'])) {
@@ -44,10 +44,11 @@ if (isset($_SESSION['$password_err'])) {
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card text-center" id="profile-section">
-                    <h2>Cześć <strong><?php echo htmlspecialchars($_SESSION["first_name"]); ?></strong>, oto twój panel pacjenta!</h2>
+                    <h1>Panel dentysty</h1>
+                    <h2>Cześć <strong><?php echo htmlspecialchars($_SESSION["first_name"]); ?></strong>, oto twój panel!</h2>
                     <div class="row justify-content-center">
                         <p class="col-md-8">
-                            Możesz przeglądać w nim swoje wizyty, historie odbytych wizyt jak również możesz zmienić swoje dane osobowe i hasło.
+                            Możesz przeglądać w nim swoje wizyty, historie przeprowadzonych wizyt jak również możesz zmienić swoje dane osobowe i hasło.
                         </p>
                     </div>
                 </div>

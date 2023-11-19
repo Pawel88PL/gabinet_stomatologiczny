@@ -32,7 +32,7 @@ if (isset($viewData)) {
 </head>
 
 <body class="bg-light">
-    <?php include 'navbar.php'; ?>
+    <?php include 'shared_navbar.php'; ?>
 
     <div class="container">
         <div class="row justify-content-center">
@@ -40,7 +40,7 @@ if (isset($viewData)) {
                 <div class="card my-5">
                     <div class="card-body">
                         <h2 class="card-title text-center mb-4">Formularz rejestracji</h2>
-                        <form action="../controllers/register_controller.php" method="post">
+                        <form action="../controllers/patient_add_controller.php" method="post">
                             <div class="form-group mb-3">
                                 <label class="form-label">Imię</label>
                                 <input type="text" name="first_name" class="form-control <?php echo (!empty($first_name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $first_name; ?>">
@@ -64,7 +64,7 @@ if (isset($viewData)) {
                             <div class="form-group mb-4">
                                 <input type="submit" class="btn btn-primary w-100" value="Zarejestruj się">
                             </div>
-                            <p class="text-center">Masz już konto? <a href="../views/login.php">Zaloguj się</a></p>
+                            <p class="text-center">Masz już konto? <a href="patient_login.php">Zaloguj się</a></p>
                         </form>
                     </div>
                 </div>

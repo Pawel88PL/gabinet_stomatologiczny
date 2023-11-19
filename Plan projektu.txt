@@ -1,0 +1,30 @@
+1. **Zarządzanie profilami pacjentów:                                     --> ZROBIONE
+    - Umożliw pacjentom przeglądanie i edycję swoich danych osobowych.    --> ZROBIONE
+    - Dodaj funkcjonalność zmiany hasła.                                  --> ZROBIONE
+
+2. **Funkcje zarządzania dentystami:**
+   - Rozpocznij od stworzenia modelu `Dentist` w PHP, który będzie odpowiadać za zarządzanie danymi dentystów w bazie danych.
+   - Następnie stwórz widok panelu administracyjnego, gdzie administrator może dodawać, edytować i usuwać profile dentystów.
+   - Rozważ dodanie funkcji przypisywania specjalizacji oraz dni i godzin pracy dla każdego dentysty.
+
+3. **System zarządzania dostępnością:**
+   - Zaimplementuj tabelę w bazie danych, która przechowuje informacje o dostępności każdego dentysty (np. dni pracy, godziny).
+   - Stwórz interfejs, w którym dentysta może aktualizować swoją dostępność.
+
+4. **Rezerwacja wizyt:**
+   - Rozwijaj kalendarz dostępności, korzystając z informacji o dostępności dentystów.
+   - Umożliw pacjentom wybór dostępnego terminu i automatycznie aktualizuj bazę danych po zarezerwowaniu wizyty.
+
+5. **Przeglądanie i zarządzanie wizytami:**
+   - Stwórz widoki dla pacjentów do przeglądania nadchodzących i minionych wizyt.
+   - Dodaj opcje anulowania i zmiany terminu wizyt.
+
+6. **Powiadomienia:**
+   - Rozważ zaimplementowanie systemu powiadomień e-mailowych lub SMSowych za pomocą zewnętrznego API.
+   - Ustaw automatyczne przypomnienia o zbliżających się wizytach.
+
+7. **Raportowanie i statystyki:**
+   - Stwórz panel statystyk dla dentystów i pacjentów, prezentujący np. liczbę wykonanych wizyt, najpopularniejsze usługi itp.
+   - Rozważ możliwość eksportowania danych do formatów takich jak CSV czy PDF.
+
+Zalecam również regularne testowanie i dostosowywanie każdej z tych funkcji, aby upewnić się, że wszystko działa poprawnie i spełnia wymagania użytkowników.

@@ -32,7 +32,7 @@ if (isset($_SESSION['password_err'])) {
 </head>
 
 <body class="bg-light">
-    <?php include 'navbar.php'; ?>
+    <?php include 'shared_navbar.php'; ?>
 
     <div class="container">
         <div class="row justify-content-center">
@@ -45,7 +45,7 @@ if (isset($_SESSION['password_err'])) {
                             echo '<div class="alert alert-danger">' . $login_err . '</div>';
                         }
                         ?>
-                        <form action="../controllers/login_controller.php" method="post">
+                        <form action="../controllers/patient_login_controller.php" method="post">
                             <div class="form-group mb-3">
                                 <label class="form-label">Email</label>
                                 <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="">
@@ -59,7 +59,7 @@ if (isset($_SESSION['password_err'])) {
                             <div class="form-group mb-4">
                                 <input type="submit" class="btn btn-primary w-100" value="Zaloguj się">
                             </div>
-                            <p class="text-center">Nie masz konta? <a href="register.php">Zarejestruj się!</a></p>
+                            <p class="text-center">Nie masz konta? <a href="patient_register.php">Zarejestruj się!</a></p>
                         </form>
                     </div>
                 </div>

@@ -9,7 +9,7 @@ error_reporting(E_ALL);
 session_start();
 // Załączanie pliku konfiguracyjnego i klasy użytkownika
 require_once '../../config/database.php';
-require_once '../models/patient.php';
+require_once '../models/dentist.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -33,22 +33,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Po próbie logowania
     if (empty($email_err) && empty($password_err)) {
-        $user = new Patient($db);
+        $user = new Dentist($db);
         if ($user->login($email, $password)) {
-            // Przekierowanie do panelu użytkownika
-            header("location: ../views/patient_panel.php");
-            exit;
+            // Sprawdzenie roli użytkownika i przekierowanie do odpowiedniego panelu
+            if ($_SESSION["role"] == 'dentist') {
+                header("location: ../views/dentist_panel.php");
+                exit;
+            } elseif ($_SESSION["role"] == 'administrator') {
+                header("location: ../views/admin_panel.php");
+                exit;
+            } else {
+                // Można dodać obsługę innych ról lub domyślne przekierowanie
+            }
         } else {
             // Przekazanie błędu do sesji i przekierowanie z powrotem do formularza logowania
             $_SESSION['login_err'] = "Niepoprawny email lub hasło.";
-            header("location: ../views/login.php");
+            header("location: ../views/dentist_login.php");
             exit;
         }
     } else {
         // Przekazanie błędów walidacji do sesji
         $_SESSION['email_err'] = $email_err;
         $_SESSION['password_err'] = $password_err;
-        header("location: ../views/login.php");
+        header("location: ../views/dentist_login.php");
         exit;
     }
 

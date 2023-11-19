@@ -11,7 +11,7 @@ class Patient
 
     public function login($email, $password)
     {
-        $query = "SELECT patient_id, first_name, last_name, email, password FROM " . $this->table_name . " WHERE email = :email";
+        $query = "SELECT patient_id, first_name, last_name, email, password, role FROM " . $this->table_name . " WHERE email = :email";
 
         // Przygotowanie zapytania
         $stmt = $this->db->prepare($query);
@@ -29,6 +29,7 @@ class Patient
             $hashed_password = $row['password'];
             $first_name = $row['first_name'];
             $last_name = $row['last_name'];
+            $role = $row['role'];
 
             if (password_verify($password, $hashed_password)) {
                 $_SESSION["loggedin"] = true;
@@ -36,6 +37,7 @@ class Patient
                 $_SESSION["email"] = $email;
                 $_SESSION["first_name"] = $first_name;
                 $_SESSION["last_name"] = $last_name;
+                $_SESSION["role"] = $role;
 
                 return true;
             } else {
