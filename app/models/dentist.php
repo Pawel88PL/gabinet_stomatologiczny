@@ -133,7 +133,7 @@ class Dentist
               SET first_name = :first_name, 
                   last_name = :last_name, 
                   email = :email,
-                  specialization = :specialization,
+                  specialization = :specialization
               WHERE dentist_id = :dentist_id";
 
         $stmt = $this->db->prepare($query);
