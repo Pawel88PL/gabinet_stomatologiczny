@@ -64,7 +64,7 @@ if (isset($viewData)) {
                             <div class="form-group mb-4">
                                 <input type="submit" class="btn btn-primary w-100" value="Zarejestruj się">
                             </div>
-                            <p class="text-center">Masz już konto? <a href="patient_login.php">Zaloguj się</a></p>
+                            <p class="text-center">Masz już konto? <a href="/gabinet/app/views/patient_login.php">Zaloguj się</a></p>
                         </form>
                     </div>
                 </div>

@@ -6,9 +6,15 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="btn btn-light" href="/gabinet/app/views/patient_register.php">Zarejestruj się!</a>
-                </li>
+                <?php
+                if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] == false) {
+                ?>
+                    <li class="nav-item">
+                        <a class="btn btn-light" href="/gabinet/app/views/patient_register.php">Zarejestruj się!</a>
+                    </li>
+                <?php
+                }
+                ?>
                 <li class="nav-item dropdown">
                     <a class="btn btn-light dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Twoje konto
