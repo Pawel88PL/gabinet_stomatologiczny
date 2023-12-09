@@ -110,7 +110,7 @@ if (isset($_SESSION['$password_err'])) {
                 </div>
 
                 <div class="card" id="edit-profile" style="display:none;">
-                    <form action="../controllers/update_patient.php" method="post" class="row g-3">
+                    <form action="../controllers/patient_update_controller.php" method="post" class="row g-3">
                         <div class="col-lg-4">
                             <label for="first_name" class="form-label">Imię</label>
                             <input type="text" id="first_name" name="first_name" class="form-control" value="<?php echo htmlspecialchars($_SESSION["first_name"]); ?>" required>
@@ -131,7 +131,7 @@ if (isset($_SESSION['$password_err'])) {
                 </div>
 
                 <div class="card" id="change-password" style="display:none;">
-                    <form action="../controllers/change_password.php" method="post">
+                    <form action="../controllers/patient_change_password_controller.php" method="post">
                         <div class="form-group">
                             <label for="current_password">Aktualne hasło</label>
                             <input type="password" id="current_password" name="current_password" class="form-control" required />

@@ -27,7 +27,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     echo "<td>{$email}</td>";
     echo "<td>{$specialization}</td>";
     echo "<td>";
-    echo "<a href='edit_dentist.php?id={$dentist_id}' class='btn btn-primary'>Edytuj</a>";
+    echo "<a href='dentist_edit.php?dentist_id={$dentist_id}' class='btn btn-primary'>Edytuj</a>";
     echo " <a href='../controllers/delete_dentist_controller.php?dentist_id={$dentist_id}' class='btn btn-danger' onclick='return confirmDeletion()'>Usuń</a>";
 
     echo "</td>";

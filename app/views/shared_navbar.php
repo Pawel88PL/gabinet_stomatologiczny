@@ -24,9 +24,28 @@
                 <?php
                 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
                     $firstName = $_SESSION['first_name'] ?? 'Gość';
-                    echo 'Witaj <strong>' . htmlspecialchars($firstName) . '!</strong>';
+                    $role = $_SESSION['role'] ?? 'nieokreślona rola';
+
+                    // Tłumaczenie roli na język polski
+                    switch ($role) {
+                        case 'administrator':
+                            $translatedRole = 'administrator';
+                            break;
+                        case 'patient':
+                            $translatedRole = 'pacjent';
+                            break;
+                        case 'dentist':
+                            $translatedRole = 'dentysta';
+                            break;
+                        default:
+                            $translatedRole = 'nieokreślona rola';
+                    }
+
+                    echo "Cześć <strong>" . htmlspecialchars($firstName) . "</strong>! Jesteś zalogowany jako <strong>" . htmlspecialchars($translatedRole) . "</strong>.";
                 }
                 ?>
+
+
             </span>
             <span class="nav-item">
                 <?php

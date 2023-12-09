@@ -28,39 +28,14 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION
 
         <h1 class="text-center">Panel Administracyjny</h1>
 
-        <!-- Lista dentystów -->
-        <div class="card mt-4">
-            <div class="card-header">
-                <h5>Lista Dentystów</h3>
-                <?php
-                if (isset($_SESSION['error_message'])) {
-                    echo '<div class="alert alert-danger">' . $_SESSION['error_message'] . '</div>';
-                    // Usunięcie komunikatu po wyświetleniu
-                    unset($_SESSION['error_message']);
-                }
-                if (isset($_SESSION['success_message'])) {
-                    echo '<div class="alert alert-success">' . $_SESSION['success_message'] . '</div>';
-                    // Usunięcie komunikatu po wyświetleniu
-                    unset($_SESSION['success_message']);
-                }
-                ?>
-            </div>
-            <div class="card-body">
-                <!-- Tabela z dentystami -->
-                <?php
-                include 'shared_dentist_list.php';
-                ?>
-            </div>
-        </div>
-
-
+        <button onclick="toggleSection('add-dentist', true);" class="btn btn-primary m-1">Dodaj Nowego Dentystę</button>
 
         <!-- Formularz dodawania nowego dentysty -->
-        <div class="card mt-4 col-md-6">
+        <div class="card mt-4 col-md-6" id="add-dentist" style="display:none;">
             <div class="card-header">
-                <button onclick="toggleSection('add-dentist', true);" class="btn btn-primary m-1">Dodaj Nowego Dentystę</button>
+                Formularz dodawania dentysty
             </div>
-            <div class="card-body" id="add-dentist" style="display:none;">
+            <div class="card-body">
                 <form action="../controllers/dentist_add_controller.php" method="post">
                     <!-- Dane osobowe -->
                     <div class="mb-3">
@@ -88,6 +63,44 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION
                     <button type="submit" class="btn btn-primary">Dodaj Dentystę</button>
                     <button type="button" onclick="toggleSection('add-dentist', false);" class="btn btn-secondary m-1">Anuluj</button>
                 </form>
+            </div>
+        </div>
+
+        <!-- Lista dentystów -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5>Lista Dentystów</h3>
+                    <?php
+                    if (isset($_SESSION['error_message'])) {
+                        echo '<div class="alert alert-danger">' . $_SESSION['error_message'] . '</div>';
+                        // Usunięcie komunikatu po wyświetleniu
+                        unset($_SESSION['error_message']);
+                    }
+                    if (isset($_SESSION['success_message'])) {
+                        echo '<div class="alert alert-success">' . $_SESSION['success_message'] . '</div>';
+                        // Usunięcie komunikatu po wyświetleniu
+                        unset($_SESSION['success_message']);
+                    }
+                    ?>
+                    <?php if (isset($_SESSION['update_success'])) : ?>
+                        <div class="alert alert-success">
+                            <?php echo $_SESSION['update_success']; ?>
+                            <?php unset($_SESSION['update_success']); ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (isset($_SESSION['update_err'])) : ?>
+                        <div class="alert alert-danger">
+                            <?php echo $_SESSION['update_err']; ?>
+                            <?php unset($_SESSION['update_err']); ?>
+                        </div>
+                    <?php endif; ?>
+            </div>
+            <div class="card-body">
+                <!-- Tabela z dentystami -->
+                <?php
+                include 'shared_dentist_list.php';
+                ?>
             </div>
         </div>
     </div>

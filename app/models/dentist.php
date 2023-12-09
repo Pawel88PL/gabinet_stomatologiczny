@@ -95,10 +95,19 @@ class Dentist
     }
 
 
-    // Read (odczytywanie danych dentysty)
-    public function read()
+    public function getDentistById($dentist_id)
     {
-        // Tutaj należy dodać logikę odczytu danych dentysty
+        $query = "SELECT * FROM dentists WHERE dentist_id = :dentist_id";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':dentist_id', $dentist_id);
+        $stmt->execute();
+
+        if ($stmt->rowCount() == 1) {
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return false;
+        }
     }
 
     public function readAll()
@@ -114,11 +123,34 @@ class Dentist
         return $stmt;
     }
 
-    // Update (aktualizacja danych dentysty)
-    public function update()
+    public function updateProfile($dentistId, $firstName, $lastName, $email)
     {
-        // Tutaj należy dodać logikę aktualizacji danych dentysty
+        if ($this->isEmailUsedByAnotherDentist($dentistId, $email)) {
+            return false; // Email jest już używany przez innego dentystę
+        }
+
+        $query = "UPDATE " . $this->table_name . " 
+              SET first_name = :first_name, 
+                  last_name = :last_name, 
+                  email = :email 
+              WHERE dentist_id = :dentist_id";
+
+        $stmt = $this->db->prepare($query);
+        $firstName = htmlspecialchars(strip_tags($firstName));
+        $lastName = htmlspecialchars(strip_tags($lastName));
+        $email = htmlspecialchars(strip_tags($email));
+        $stmt->bindParam(':first_name', $firstName);
+        $stmt->bindParam(':last_name', $lastName);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':dentist_id', $dentistId);
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
     }
+
 
     // Delete (usuwanie dentysty)
     public function delete($dentistId)
@@ -171,6 +203,23 @@ class Dentist
         } else {
             return false; // Email nie istnieje
         }
+    }
+
+    public function isEmailUsedByAnotherDentist($dentistId, $email)
+    {
+        $query = "SELECT COUNT(*) FROM " . $this->table_name . " 
+                  WHERE email = :email AND dentist_id != :dentist_id";
+
+        // Przygotowanie zapytania
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':dentist_id', $dentistId);
+
+        // Wykonanie zapytania
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
+
+        return $count > 0;
     }
 
 
