@@ -84,7 +84,7 @@ if (isset($_GET['dentist_id'])) {
                     <!-- Dane osobowe -->
                     <div class="mb-3">
                         <label for="first_name" class="form-label">Imię</label>
-                        <input type="text" class="form-control" id="first_name" name="first_name" required value="<?php echo htmlspecialchars($dentist_data['first_name']); ?>">
+                        <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo htmlspecialchars($dentist_data['first_name']); ?>">
                     </div>
                     <div class="mb-3">
                         <label for="last_name" class="form-label">Nazwisko</label>

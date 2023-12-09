@@ -4,8 +4,7 @@
 
 2. **Funkcje zarządzania dentystami:**
    - Stworzenie modelu `Dentist` w PHP, który będzie odpowiadać za zarządzanie danymi dentystów w bazie danych. --> ZROBIONE
-   - Widok panelu administracyjnego, gdzie administrator może dodawać, edytować i usuwać profile dentystów. 
-   - Rozważ dodanie funkcji przypisywania specjalizacji oraz dni i godzin pracy dla każdego dentysty.
+   - Widok panelu administracyjnego, gdzie administrator może dodawać, edytować i usuwać profile dentystów. --> ZROBIONE
 
 3. **System zarządzania dostępnością:**
    - Zaimplementuj tabelę w bazie danych, która przechowuje informacje o dostępności każdego dentysty (np. dni pracy, godziny).

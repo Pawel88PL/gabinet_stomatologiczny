@@ -18,28 +18,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validate first name
     if (empty(trim($_POST["first_name"]))) {
-        $first_name_err = "Please enter a first name.";
+        $first_name_err = "Proszę podać imię.";
     } else {
         $first_name = trim($_POST["first_name"]);
     }
 
     // Validate last name
     if (empty(trim($_POST["last_name"]))) {
-        $last_name_err = "Please enter a last name.";
+        $last_name_err = "Proszę podać nazwisko.";
     } else {
         $last_name = trim($_POST["last_name"]);
     }
 
     // Validate email
     if (empty(trim($_POST["email"]))) {
-        $email_err = "Please enter an email.";
+        $email_err = "Proszę podać adres email.";
     } else {
         $email = trim($_POST["email"]);
     }
 
     // Validate password
     if (empty(trim($_POST["password"]))) {
-        $password_err = "Please enter a password.";
+        $password_err = "Proszę wpisać hasło.";
     } else {
         $password = trim($_POST["password"]);
     }
@@ -96,5 +96,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ];
 
     // Załaduj widok i przekaż dane
-    require_once '../views/register.php';
+    require_once '../views/patient_register.php';
 }

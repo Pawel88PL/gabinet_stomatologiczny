@@ -42,6 +42,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = trim($_POST["email"]);
     }
 
+    if (empty(trim($_POST["specialization"]))) {
+        $update_err .= "\nProszę podać specjalizację.";
+    } else {
+        $specialization = trim($_POST["specialization"]);
+    }
+
     if (empty($update_err)) {
         if (!empty($email) && $dentist->isEmailUsedByAnotherDentist($dentist_id, $email)) {
             $_SESSION['update_err'] = "Podany adres email jest używany przez innego dentystę.";
@@ -60,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     } else {
         $_SESSION['update_err'] = $update_err;
-        header("location: ../views/admin_panel.php");
+        header("location: ../views/dentist_edit.php");
         exit;
     }
 }

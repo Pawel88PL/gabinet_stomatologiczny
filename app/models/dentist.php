@@ -123,7 +123,7 @@ class Dentist
         return $stmt;
     }
 
-    public function updateProfile($dentistId, $firstName, $lastName, $email)
+    public function updateProfile($dentistId, $firstName, $lastName, $email, $specialization)
     {
         if ($this->isEmailUsedByAnotherDentist($dentistId, $email)) {
             return false; // Email jest już używany przez innego dentystę
@@ -132,7 +132,8 @@ class Dentist
         $query = "UPDATE " . $this->table_name . " 
               SET first_name = :first_name, 
                   last_name = :last_name, 
-                  email = :email 
+                  email = :email,
+                  specialization = :specialization,
               WHERE dentist_id = :dentist_id";
 
         $stmt = $this->db->prepare($query);
@@ -142,6 +143,7 @@ class Dentist
         $stmt->bindParam(':first_name', $firstName);
         $stmt->bindParam(':last_name', $lastName);
         $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':specialization', $specialization);
         $stmt->bindParam(':dentist_id', $dentistId);
 
         if ($stmt->execute()) {
