@@ -26,7 +26,7 @@
                     $firstName = $_SESSION['first_name'] ?? 'Gość';
                     $role = $_SESSION['role'] ?? 'nieokreślona rola';
 
-                    // Tłumaczenie roli na język polski
+                    // Tłumaczenie roli na język polski jakas inna zmiana w tym samym pliku 
                     switch ($role) {
                         case 'administrator':
                             $translatedRole = 'administrator';
