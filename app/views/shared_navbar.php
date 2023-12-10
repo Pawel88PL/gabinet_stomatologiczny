@@ -47,7 +47,7 @@
                             $translatedRole = 'nieokreślona rola';
                     }
 
-                    echo "Cześć <strong>" . htmlspecialchars($firstName) . "</strong>! Jesteś zalogowany jako <strong>" . htmlspecialchars($translatedRole) . "</strong>.";
+                    echo "Witaj <strong>" . htmlspecialchars($firstName) . "</strong>! Jesteś zalogowany/a jako <strong>" . htmlspecialchars($translatedRole) . "</strong>.";
                 }
                 ?>
 

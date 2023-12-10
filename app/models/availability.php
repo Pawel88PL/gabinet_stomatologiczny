@@ -58,9 +58,41 @@ class Availability
         $stmt->bindParam(':end_time', $this->end_time);
 
         if ($stmt->execute()) {
+            error_log("Dostępność została zaktualizowana: Dentysta ID " . $this->dentist_id . ", Czas rozpoczęcia: " . $this->start_time . ", Czas zakończenia: " . $this->end_time);
             return true;
         }
 
         return false;
     }
+
+    public function getAllAvailability($dentist_id)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE dentist_id = :dentist_id";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':dentist_id', $dentist_id);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+
+    public function delete()
+    {
+        $query = "DELETE FROM " . $this->table_name . " WHERE availability_id = :availability_id";
+
+        $stmt = $this->conn->prepare($query);
+
+        $this->availability_id = htmlspecialchars(strip_tags($this->availability_id));
+
+        $stmt->bindParam(':availability_id', $this->availability_id);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
