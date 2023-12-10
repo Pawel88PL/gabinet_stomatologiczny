@@ -1,26 +1,35 @@
 <?php
 session_start();
 
-// Sprawdzanie, czy użytkownik ma uprawnienia administracyjne
+// Sprawdzanie, czy użytkownik jest zalogowany i ma rolę dentysty
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["role"] !== 'dentist') {
     header("location: dentist_login.php");
     exit;
 }
 
-$update_err = "";
-if (isset($_SESSION['update_err'])) {
-    $update_err = $_SESSION['update_err'];
-    unset($_SESSION['update_err']); // Czyszczenie błędu z sesji
+require_once '../../config/database.php';
+require_once '../models/dentist.php';
+
+// Utworzenie obiektu bazy danych i dentysty
+$database = new Database();
+$db = $database->getConnection();
+$dentist = new Dentist($db);
+
+// Próba pobrania danych dentysty
+$dentist_data = $dentist->getDentistById($_SESSION["user_id"]);
+
+if ($dentist_data === false) {
+    // Obsługa błędu, jeśli nie znaleziono danych dentysty
+    echo "Błąd: Nie można znaleźć danych dentysty.";
+    exit;
 }
 
-$password_err = "";
-if (isset($_SESSION['$password_err'])) {
-    $password_err = $_SESSION['$password_err'];
-    unset($_SESSION['$password_err']); // Czyszczenie błędu z sesji
-}
-// Tutaj możesz załadować dane pacjenta z bazy danych
-// $upcomingAppointments = loadUpcomingAppointments($_SESSION["id"]);
-// $pastAppointments = loadPastAppointments($_SESSION["id"]);
+// Pobieranie danych dostępności
+$query = "SELECT * FROM availability WHERE dentist_id = :dentist_id";
+$stmt = $db->prepare($query);
+$stmt->bindParam(':dentist_id', $_SESSION["user_id"]);
+$stmt->execute();
+$availability = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -45,10 +54,42 @@ if (isset($_SESSION['$password_err'])) {
             <div class="col-md-8">
                 <div class="card text-center" id="profile-section">
                     <h2>Witam doktorze <strong><?php echo htmlspecialchars($_SESSION["first_name"]); ?></strong>, oto twój panel!</h2>
-                    <div class="row justify-content-center">
-                        <p class="col-md-8">
-                            Możesz przeglądać w nim zaplanowane wizyty jak i historię przeprowadzonych wizyt.
-                        </p>
+                    <p>Twój numer identyfikacyjny w bazie danych to: <strong><?php echo htmlspecialchars($_SESSION["user_id"]); ?></strong></p>
+                </div>
+
+                <div class="card">
+                    <?php if (!empty($_SESSION['start_time_err'])) : ?>
+                        <div class="alert alert-danger"><?php echo $_SESSION['start_time_err']; ?></div>
+                    <?php endif; ?>
+                    <?php if (!empty($_SESSION['end_time_err'])) : ?>
+                        <div class="alert alert-danger"><?php echo $_SESSION['end_time_err']; ?></div>
+                    <?php endif; ?>
+                    <?php if (!empty($_SESSION['success_message'])) : ?>
+                        <div class="alert alert-success"><?php echo $_SESSION['success_message']; ?></div>
+                    <?php endif; ?>
+
+                    <div class="availability-section">
+                        <h2>Twoja aktualna dostępność:</h2>
+                        <?php foreach ($availability as $slot) : ?>
+                            <p><?php echo htmlspecialchars($slot['start_time']); ?> do <?php echo htmlspecialchars($slot['end_time']); ?></p>
+                        <?php endforeach; ?>
+
+                        <hr>
+
+                        <h4>Dodaj kolejną dostępność:</h4>
+                        <form action="../controllers/dentist_availability_controller.php" method="post">
+                            <input type="hidden" name="dentist_id" value="<?php echo $_SESSION['user_id']; ?>">
+                            <div class="mb-3">
+                                <label for="start_time">Czas rozpoczęcia:</label>
+                                <input type="datetime-local" id="start_time" name="start_time" class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="end_time">Czas zakończenia:</label>
+                                <input type="datetime-local" id="end_time" name="end_time" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Aktualizuj dostępność</button>
+                        </form>
                     </div>
                 </div>
 

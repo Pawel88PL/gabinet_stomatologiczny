@@ -3,7 +3,7 @@ session_start();
 
 // Sprawdzenie, czy użytkownik jest zalogowany i ma uprawnienia administracyjne
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["role"] !== 'administrator') {
-    header("location: login.php");
+    header("location: ../views/dentist_login.php");
     exit;
 }
 
