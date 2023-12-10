@@ -7,8 +7,10 @@
    - Widok panelu administracyjnego, gdzie administrator może dodawać, edytować i usuwać profile dentystów. --> ZROBIONE
 
 3. **System zarządzania dostępnością:**
-   - Zaimplementuj tabelę w bazie danych, która przechowuje informacje o dostępności każdego dentysty (np. dni pracy, godziny).
-   - Stwórz interfejs, w którym dentysta może aktualizować swoją dostępność.
+   - Tabela w bazie danych, która przechowuje informacje o dostępności każdego dentysty (np. dni pracy, godziny).  --> ZROBIONE
+   - Interfejs, w którym dentysta może dodać nową dostępność.  --> ZROBIONE
+   - Możliwość edycji swojej dostępności.  --> ZROBIONE
+   - Możliwość usunięcia swojej dostępności  --> ZROBIONE
 
 4. **Rezerwacja wizyt:**
    - Rozwijaj kalendarz dostępności, korzystając z informacji o dostępności dentystów.
