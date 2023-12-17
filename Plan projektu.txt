@@ -11,6 +11,7 @@
    - Interfejs, w którym dentysta może dodać nową dostępność.  --> ZROBIONE
    - Możliwość edycji swojej dostępności.  --> ZROBIONE
    - Możliwość usunięcia swojej dostępności  --> ZROBIONE
+   - Możliwość eksportu swojej dostępności do pliku
 
 4. **Rezerwacja wizyt:**
    - Rozwijaj kalendarz dostępności, korzystając z informacji o dostępności dentystów.

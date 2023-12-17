@@ -87,7 +87,21 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
                     <?php endif; ?>
 
                     <div class="availability-section">
-                        <h2>Twoja aktualna dostępność:</h2>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h2>Twoja aktualna dostępność:</h2>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <a href="../controllers/export_availability_controller.php" class="btn btn-secondary w-100">Ekspor do CSV</a>
+                                    </div>
+                                    <div class="col-6">
+                                        <button onclick="toggleSection('add-availability-section', true)" class="btn btn-primary w-100">Dodaj nową</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover">
                                 <thead>
@@ -114,41 +128,43 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
                                 </tbody>
                             </table>
                         </div>
+                        <hr>
+                    </div>
+                </div>
 
-                        <div id="edit-availability-section" style="display: none; padding-top:6rem">
-                            <h3>Edytuj Dostępność</h3>
-                            <form id="edit-availability-form" action="../controllers/dentist_availability_controller.php" method="post">
-                                <input type="hidden" id="edit-availability-id" name="availability_id">
-                                <div class="mb-3">
-                                    <label for="edit-start-time">Czas rozpoczęcia:</label>
-                                    <input type="datetime-local" id="edit-start-time" name="start_time" class="form-control">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="edit-end-time">Czas zakończenia:</label>
-                                    <input type="datetime-local" id="edit-end-time" name="end_time" class="form-control">
-                                </div>
-                                <button type="submit" class="btn btn-primary">Zapisz Zmiany</button>
-                                <button type="button" class="btn btn-secondary" onclick="toggleSection('edit-availability-section', false)">Anuluj</button>
-                            </form>
+                <div class="card" id="edit-availability-section" style="display: none; padding-top:6rem">
+                    <h3>Edytuj Dostępność</h3>
+                    <form id="edit-availability-form" action="../controllers/dentist_availability_controller.php" method="post">
+                        <input type="hidden" id="edit-availability-id" name="availability_id">
+                        <div class="mb-3">
+                            <label for="edit-start-time">Czas rozpoczęcia:</label>
+                            <input type="datetime-local" id="edit-start-time" name="start_time" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-end-time">Czas zakończenia:</label>
+                            <input type="datetime-local" id="edit-end-time" name="end_time" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Zapisz Zmiany</button>
+                        <button type="button" class="btn btn-secondary" onclick="toggleSection('edit-availability-section', false)">Anuluj</button>
+                    </form>
+                </div>
+
+                <div class="card" id="add-availability-section" style="display: none; padding-top:6rem">
+                    <h4>Dodaj kolejną dostępność:</h4>
+                    <form action="../controllers/dentist_availability_controller.php" method="post">
+                        <input type="hidden" name="dentist_id" value="<?php echo $_SESSION['user_id']; ?>">
+                        <div class="mb-3">
+                            <label for="start_time">Czas rozpoczęcia:</label>
+                            <input type="datetime-local" id="start_time" name="start_time" class="form-control">
                         </div>
 
-                        <hr>
-
-                        <h4>Dodaj kolejną dostępność:</h4>
-                        <form action="../controllers/dentist_availability_controller.php" method="post">
-                            <input type="hidden" name="dentist_id" value="<?php echo $_SESSION['user_id']; ?>">
-                            <div class="mb-3">
-                                <label for="start_time">Czas rozpoczęcia:</label>
-                                <input type="datetime-local" id="start_time" name="start_time" class="form-control">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="end_time">Czas zakończenia:</label>
-                                <input type="datetime-local" id="end_time" name="end_time" class="form-control">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Dodaj dostępność</button>
-                        </form>
-                    </div>
+                        <div class="mb-3">
+                            <label for="end_time">Czas zakończenia:</label>
+                            <input type="datetime-local" id="end_time" name="end_time" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Dodaj dostępność</button>
+                        <button type="button" class="btn btn-secondary" onclick="toggleSection('add-availability-section', false)">Anuluj</button>
+                    </form>
                 </div>
 
                 <div class="card">
