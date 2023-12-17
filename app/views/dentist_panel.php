@@ -26,13 +26,6 @@ if ($dentist_data === false) {
     exit;
 }
 
-// Pobieranie danych dostępności
-$query = "SELECT * FROM availability WHERE dentist_id = :dentist_id";
-$stmt = $db->prepare($query);
-$stmt->bindParam(':dentist_id', $_SESSION["user_id"]);
-$stmt->execute();
-$availability = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 // Przywitanie lekarza
 $firstName = htmlspecialchars($_SESSION["first_name"]);
 $lastChar = strtolower(substr($firstName, -1)); // Pobiera ostatni znak imienia
@@ -113,7 +106,7 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($availability as $slot) : ?>
+                                    <?php foreach ($availabilityData as $slot) : ?>
                                         <tr>
                                             <td><?php echo htmlspecialchars($slot['start_time']); ?></td>
                                             <td><?php echo htmlspecialchars($slot['end_time']); ?></td>

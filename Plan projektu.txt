@@ -10,8 +10,9 @@
    - Tabela w bazie danych, która przechowuje informacje o dostępności każdego dentysty (np. dni pracy, godziny).  --> ZROBIONE
    - Interfejs, w którym dentysta może dodać nową dostępność.  --> ZROBIONE
    - Możliwość edycji swojej dostępności.  --> ZROBIONE
+   - Validacja czasów dostępności. --> ZROBIONE
    - Możliwość usunięcia swojej dostępności  --> ZROBIONE
-   - Możliwość eksportu swojej dostępności do pliku
+   - Możliwość eksportu swojej dostępności do pliku CSV --> ZROBIONE
 
 4. **Rezerwacja wizyt:**
    - Rozwijaj kalendarz dostępności, korzystając z informacji o dostępności dentystów.
