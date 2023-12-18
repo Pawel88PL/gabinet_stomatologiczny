@@ -1,33 +1,4 @@
 
-function splitIntoSessionsWithBreaks(data) {
-    const sessions = [];
-    data.forEach(item => {
-        let startTime = new Date(item.start_time);
-        const endTime = new Date(item.end_time);
-        const dentistName = item.first_name + ' ' + item.last_name;
-
-        while (startTime < endTime) {
-            const sessionEnd = new Date(startTime.getTime() + (50 * 60 * 1000));
-
-            if (sessionEnd <= endTime) {
-                sessions.push({
-                    title: dentistName,
-                    start: startTime.toISOString(),
-                    end: sessionEnd.toISOString(),
-                    color: 'green',
-                    extendedProps: {
-                        dentist_id: item.dentist_id
-                    }
-                });
-            }
-
-            startTime = new Date(sessionEnd.getTime() + (10 * 60 * 1000));
-        }
-    });
-    return sessions;
-}
-
-
 document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
     var patientId = calendarEl.getAttribute('data-patient-id');
@@ -42,8 +13,18 @@ document.addEventListener('DOMContentLoaded', function () {
             fetch('/gabinet/app/controllers/get_availability.php')
                 .then(response => response.json())
                 .then(data => {
-                    const sessionsWithBreaks = splitIntoSessionsWithBreaks(data);
-                    successCallback(sessionsWithBreaks);
+                    const events = data.map(item => {
+                        return {
+                            title: item.first_name + ' ' + item.last_name,
+                            start: item.start_time,
+                            end: item.end_time,
+                            color: 'green',
+                            extendedProps: {
+                                dentist_id: item.dentist_id
+                            }
+                        };
+                    });
+                    successCallback(events);
                 })
                 .catch(error => failureCallback(error));
         },
@@ -86,6 +67,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             title: 'Rezerwacja potwierdzona',
                             text: 'Twoja wizyta została zarezerwowana.',
                             icon: 'success'
+                        }).then(()=> {
+                            refreshCalendar();
                         });
                     }).catch(error => {
                         // Tu obsługa błędów
@@ -100,4 +83,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     calendar.render();
+
+    // Funkcja do odświeżenia kalendarza
+    function refreshCalendar() {
+        calendar.refetchEvents();
+    }
 });

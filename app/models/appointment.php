@@ -41,4 +41,17 @@ class Appointment
 
         return false;
     }
+
+    public function getFutureAppointments()
+    {
+        $currentDate = date('Y-m-d H:i:s');
+
+        $query = "SELECT * FROM " . $this->table_name . " WHERE appointment_date >= :currentDate ORDER BY appointment_date ASC";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":currentDate", $currentDate);
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
