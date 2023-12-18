@@ -9,3 +9,7 @@
 body {
     padding-top: 50px;
 }
+
+.fc-event {
+    cursor: pointer;
+}
