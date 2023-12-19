@@ -16,6 +16,20 @@ class Appointment
         $this->conn = $db;
     }
 
+    public function cancel()
+    {
+        $query = "UPDATE " . $this->table_name . " SET status = 'cancelled' WHERE appointment_id = :appointment_id";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":appointment_id", $this->appointment_id);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+
+
     public function create()
     {
         $query = "INSERT INTO " . $this->table_name . " (patient_id, dentist_id, appointment_date, status) VALUES (:patient_id, :dentist_id, :appointment_date, :status)";
@@ -54,4 +68,23 @@ class Appointment
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getPatientAppointments($patient_id)
+    {
+        $currentDate = date('Y-m-d H:i:s');
+
+        $query = "SELECT a.appointment_id, a.appointment_date, a.status, d.first_name, d.last_name 
+              FROM appointments a 
+              JOIN dentists d ON a.dentist_id = d.dentist_id 
+              WHERE a.patient_id = :patient_id AND a.appointment_date > :currentDate
+              ORDER BY a.appointment_date ASC";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':patient_id', $patient_id);
+        $stmt->bindParam(':currentDate', $currentDate);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

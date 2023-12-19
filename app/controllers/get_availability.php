@@ -26,7 +26,7 @@ foreach ($availableSlots as $slot) {
         $sessionEnd->add(new DateInterval('PT55M')); // 50 minut czas trwania wizyty
 
         $nextSessionStart = clone $sessionEnd;
-        $nextSessionStart->add(new DateInterval('PT5M')); // 10 minut przerwy
+        $nextSessionStart->add(new DateInterval('PT5M')); // 5 minut przerwy
 
         $isBooked = false;
         foreach ($bookedAppointments as $appointment) {
@@ -34,7 +34,8 @@ foreach ($availableSlots as $slot) {
 
             if (
                 $slot['dentist_id'] == $appointment['dentist_id'] &&
-                $appointmentTime >= $startTime && $appointmentTime < $sessionEnd
+                $appointmentTime >= $startTime && $appointmentTime < $sessionEnd &&
+                $appointment['status'] === 'scheduled'
             ) {
                 $isBooked = true;
                 break;

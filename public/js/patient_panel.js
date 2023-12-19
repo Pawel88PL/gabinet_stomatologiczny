@@ -1,8 +1,10 @@
 
+var calendar;
+
 document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
     var patientId = calendarEl.getAttribute('data-patient-id');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
+    calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'timeGridWeek',
         headerToolbar: {
             left: 'prev,next today',
@@ -69,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             icon: 'success'
                         }).then(()=> {
                             refreshCalendar();
+                            loadAppointments();
                         });
                     }).catch(error => {
                         // Tu obsługa błędów
@@ -88,4 +91,93 @@ document.addEventListener('DOMContentLoaded', function () {
     function refreshCalendar() {
         calendar.refetchEvents();
     }
+    loadAppointments();
 });
+
+function cancelAppointment(appointmentId) {
+    Swal.fire({
+        title: 'Czy na pewno chcesz anulować wizytę?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Tak, anuluj',
+        cancelButtonText: 'Nie'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/gabinet/app/controllers/cancel_appointment.php',
+                type: 'POST',
+                data: { appointment_id: appointmentId },
+                success: function (response) {
+                    const data = JSON.parse(response);
+                    Swal.fire(
+                        'Anulowano!',
+                        data.message,
+                        'success'
+                    ).then(() => {
+                        setTimeout(() => {
+                            $("#appointment-row-" + appointmentId).remove();
+                        }, 5000);
+                    });
+                    loadAppointments();
+                    refreshCalendar();
+                },
+                error: function (error) {
+                    Swal.fire(
+                        'Błąd!',
+                        'Nie udało się anulować wizyty.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+}
+
+
+function loadAppointments() {
+    $.ajax({
+        url: '/gabinet/app/controllers/get_appointments.php',
+        type: 'GET',
+        success: function (response) {
+            // Parsuj odpowiedź JSON i buduj tabelę
+            var appointments = JSON.parse(response);
+            var html = '';
+            appointments.forEach(function (appointment) {
+                html += '<tr id="appointment-row-' + appointment.appointment_id + '">';
+                html += '<td>' + appointment.appointment_date + '</td>';
+                html += '<td>' + appointment.first_name + ' ' + appointment.last_name + '</td>';
+                html += '<td>' + formatAppointmentStatus(appointment.status) + '</td>';
+                if (appointment.status === 'scheduled') {
+                    html += '<td><button class="btn btn-danger" onclick="cancelAppointment(' + appointment.appointment_id + ')">Anuluj</button></td>';
+                } else {
+                    html += '<td></td>'; // Puste pole, jeśli wizyta nie jest zaplanowana
+                }
+                html += '</tr>';
+            });
+            $('#appointments-table tbody').html(html);
+        },
+        error: function (error) {
+            console.log('Błąd podczas ładowania wizyt', error);
+        }
+    });
+}
+
+// Funkcja pomocnicza do formatowania statusu wizyty
+function formatAppointmentStatus(status) {
+    switch (status) {
+        case 'scheduled':
+            return 'Zaplanowana';
+        case 'cancelled':
+            return 'Anulowana';
+        default:
+            return 'Inny status';
+    }
+}
+
+function refreshCalendar() {
+    if (calendar) {
+        calendar.refetchEvents();
+    }
+}
