@@ -114,7 +114,7 @@ function refreshCalendar() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    loadAppointments();
+    loadAppointments(undefined, true);
 });
 
 function cancelAppointment(appointmentId) {
@@ -158,34 +158,55 @@ function cancelAppointment(appointmentId) {
     });
 }
 
+var globalAppointments = []; // Przechowuje wszystkie wizyty
 
-function loadAppointments() {
+function loadAppointments(filterStatus = 'scheduled', isInitialLoad = false) {
     $.ajax({
         url: '/gabinet/app/controllers/get_appointments.php',
         type: 'GET',
         success: function (response) {
-            // Parsuj odpowiedź JSON i buduj tabelę
-            var appointments = JSON.parse(response);
-            var html = '';
-            appointments.forEach(function (appointment) {
-                html += '<tr id="appointment-row-' + appointment.appointment_id + '">';
-                html += '<td>' + appointment.appointment_date + '</td>';
-                html += '<td>' + appointment.first_name + ' ' + appointment.last_name + '</td>';
-                html += '<td>' + formatAppointmentStatus(appointment.status) + '</td>';
-                if (appointment.status === 'scheduled') {
-                    html += '<td><button class="btn btn-danger" onclick="cancelAppointment(' + appointment.appointment_id + ')">Anuluj</button></td>';
-                } else {
-                    html += '<td></td>'; // Puste pole, jeśli wizyta nie jest zaplanowana
-                }
-                html += '</tr>';
-            });
-            $('#appointments-table tbody').html(html);
+            globalAppointments = JSON.parse(response);
+            var statusToFilter = isInitialLoad ? 'scheduled' : filterStatus;
+            renderTable(globalAppointments, statusToFilter);
         },
         error: function (error) {
             console.log('Błąd podczas ładowania wizyt', error);
         }
     });
 }
+
+function sortAppointments(sortKey) {
+    var sortedAppointments = [...globalAppointments];
+    sortedAppointments.sort(function (a, b) {
+        if (sortKey === 'date') {
+            return new Date(a.appointment_date) - new Date(b.appointment_date);
+        } else if (sortKey === 'dentist') {
+            return a.first_name.localeCompare(b.first_name) || a.last_name.localeCompare(b.last_name);
+        }
+    });
+    renderTable(sortedAppointments);
+}
+
+function renderTable(appointments, filterStatus = 'scheduled') {
+    var html = '';
+    appointments.forEach(function (appointment) {
+        // Jeśli filterStatus jest pusty lub równy statusowi wizyty, dodaj wizytę do tabeli
+        if (filterStatus === '' || appointment.status === filterStatus) {
+            html += '<tr id="appointment-row-' + appointment.appointment_id + '">';
+            html += '<td>' + appointment.appointment_date + '</td>';
+            html += '<td>' + appointment.first_name + ' ' + appointment.last_name + '</td>';
+            html += '<td>' + formatAppointmentStatus(appointment.status) + '</td>';
+            if (appointment.status === 'scheduled') {
+                html += '<td><button class="btn btn-danger" onclick="cancelAppointment(' + appointment.appointment_id + ')">Anuluj</button></td>';
+            } else {
+                html += '<td></td>'; // Puste pole, jeśli wizyta nie jest zaplanowana
+            }
+            html += '</tr>';
+        }
+    });
+    $('#appointments-table tbody').html(html);
+}
+
 
 // Funkcja pomocnicza do formatowania statusu wizyty
 function formatAppointmentStatus(status) {

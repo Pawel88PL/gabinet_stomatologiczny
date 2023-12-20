@@ -45,6 +45,7 @@ if (isset($_SESSION['$password_err'])) {
     <link rel="stylesheet" href="../../public/css/patient_panel.css">
     <link rel="stylesheet" href="../../public/css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
@@ -57,39 +58,49 @@ if (isset($_SESSION['$password_err'])) {
                 <div class="card text-center" id="profile-section">
                     <h2>Cześć <strong><?php echo htmlspecialchars($_SESSION["first_name"]); ?></strong>, oto twój panel pacjenta!</h2>
                     <div class="row justify-content-center">
-                        <p class="col-md-8">
+                        <div class="col-md-8">
                             Możesz przeglądać w nim swoje wizyty, historie odbytych wizyt jak również możesz zmienić swoje dane osobowe i hasło.
-                        </p>
+                        </div>
+                        <div class="col-md-4">
+                            <button onclick="toggleSection('new-appointment', true);" class="btn btn-primary m-1 w-100">Zarezerwuj nową wizytę</button>
+                        </div>
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="row">
-                        <div class="col-md-7 text-center">
+                        <div class="col-md-8 text-center">
                             <h2>Twoje wizyty:</h2>
                         </div>
-                        <div class="col-md-5">
-                            <button onclick="toggleSection('new-appointment', true);" class="btn btn-primary m-1 w-100">Zarezerwuj nową wizytę</button>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <div class="table-responsive">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover" id="appointments-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Data wizyty</th>
-                                            <th>Lekarz</th>
-                                            <th>Status</th>
-                                            <th>Akcja</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- Tutaj pojawia się tabela z danymi generowanymi dynamicznie z użyciem AJAX -->
-                                    </tbody>
-                                </table>
+                        <div class="col-md-4">
+                            <div class="dropdown">
+                                <button class="btn btn-success dropdown-toggle w-100" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Filtruj wizyty
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('scheduled')">Zaplanowane</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled')">Anulowane</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('')">Wszystkie</a></li>
+                                </ul>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Tabela z możliwością sortowania po kliknięciu nagłówka -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="appointments-table">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="align-middle">Data i godzina wizyty <button class="btn btn-light btn-sm" onclick="sortAppointments('date')"><i class="bi bi-sort-down"></i></button></th>
+                                    <th class="align-middle">Lekarz <button class="btn btn-light btn-sm" onclick="sortAppointments('dentist')"><i class="bi bi-sort-alpha-down"></i></button></th>
+                                    <th class="align-middle">Status</th>
+                                    <th class="align-middle">Akcja</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Tutaj pojawia się tabela z danymi generowanymi dynamicznie z użyciem AJAX -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 

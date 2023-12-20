@@ -71,20 +71,16 @@ class Appointment
 
     public function getPatientAppointments($patient_id)
     {
-        $currentDate = date('Y-m-d H:i:s');
-
         $query = "SELECT a.appointment_id, a.appointment_date, a.status, d.first_name, d.last_name 
               FROM appointments a 
               JOIN dentists d ON a.dentist_id = d.dentist_id 
-              WHERE a.patient_id = :patient_id AND a.appointment_date > :currentDate
+              WHERE a.patient_id = :patient_id
               ORDER BY a.appointment_date ASC";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':patient_id', $patient_id);
-        $stmt->bindParam(':currentDate', $currentDate);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
 }
