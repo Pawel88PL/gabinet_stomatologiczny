@@ -64,7 +64,14 @@ if (isset($_SESSION['$password_err'])) {
                 </div>
 
                 <div class="card">
-                    <h2>Zaplanowane wizyty</h2>
+                    <div class="row">
+                        <div class="col-md-7 text-center">
+                            <h2>Twoje wizyty:</h2>
+                        </div>
+                        <div class="col-md-5">
+                            <button onclick="toggleSection('new-appointment', true);" class="btn btn-primary m-1 w-100">Zarezerwuj nową wizytę</button>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <div class="table-responsive">
                             <div class="table-responsive">
@@ -84,12 +91,6 @@ if (isset($_SESSION['$password_err'])) {
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="card">
-                    <h2 class="text-center">Dostępne terminy naszych lekarzy:</h2>
-                    <br>
-                    <div id="calendar" data-patient-id="<?php echo $_SESSION['user_id']; ?>"></div>
                 </div>
 
                 <div class="card">
@@ -176,24 +177,24 @@ if (isset($_SESSION['$password_err'])) {
                         </div>
                     </form>
                 </div>
+
+                <div class="card" id="new-appointment" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h2 class="text-center">Kalendarz dostępności lekarzy:</h2>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button" onclick="toggleSection('new-appointment', false);" class="btn btn-secondary m-2 w-100">Ukryj</button>
+                        </div>
+                    </div>
+                    <br>
+                    <div id="calendar" data-patient-id="<?php echo $_SESSION['user_id']; ?>"></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        function toggleSection(sectionId, show) {
-            var section = document.getElementById(sectionId);
-            if (section) {
-                section.style.display = show ? 'block' : 'none';
 
-                if (show) {
-                    section.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            }
-        }
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
     <script src='/gabinet/public/js/patient_panel.js'></script>

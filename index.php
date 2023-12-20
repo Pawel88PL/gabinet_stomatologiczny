@@ -11,9 +11,13 @@ session_start();
     <title>Dentlux</title>
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
     <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
-    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.10/main.min.css' rel='stylesheet' />
     <link rel="stylesheet" href="public/css/styles.css">
     <link rel="stylesheet" href="public/css/index.css">
+    <style>
+        #myVideo {
+            filter: brightness(60%);
+        }
+    </style>
 </head>
 
 <body>
@@ -21,15 +25,20 @@ session_start();
 
     <div class="container">
         <div class="row">
-            <div class="col-lg-4">
-                <h1>DENTLUX</h1>
-                <h2>Profesjonalna opieka dentystyczna</h2>
-                <h1>Zarezerwuj swoją wizytę</h1>
-                <a href="/gabinet/app/views/patient_register.php" class="btn btn-primary m-2">Zarejestruj się teraz</a>
-                <a href="/gabinet/app/views/patient_login.php" class="btn btn-secondary m-2">Zaloguj się</a>
+            <h1 class="text-center">DENTLUX</h1>
+            <h2 class="text-center">Profesjonalna opieka dentystyczna</h2>
+            <br>
+            <div class="col-lg-5 p-4">
+                <h2>Zarejestruj się w naszym gabinecie i zarezerwuj swoją pierwszą wizytę!</h2>
+                <br>
+                <a href="/gabinet/app/views/patient_register.php" class="btn btn-lg btn-primary m-2">Zarejestruj się teraz</a>
+                <a href="/gabinet/app/views/patient_login.php" class="btn btn-lg btn-secondary m-2">Zaloguj się</a>
             </div>
-            <div class="col-lg-8">
-                
+            <div class=" col-lg-7 p-4">
+                <video autoplay muted loop id="myVideo" class="w-100">
+                    <source src="../gabinet/public/videos/start_video2.mp4" type="video/mp4">
+                    Twoja przeglądarka nie obsługuje tagu video.
+                </video>
             </div>
         </div>
     </div>
