@@ -33,7 +33,7 @@ class Patient
 
             if (password_verify($password, $hashed_password)) {
                 $_SESSION["loggedin"] = true;
-                $_SESSION["patient_id"] = $patient_id;
+                $_SESSION["user_id"] = $patient_id;
                 $_SESSION["email"] = $email;
                 $_SESSION["first_name"] = $first_name;
                 $_SESSION["last_name"] = $last_name;

@@ -6,3 +6,6 @@ body {
   background-attachment: fixed; /* Tło jest nieruchome podczas przewijania */
 }
 
+.fc-event {
+  cursor: pointer;
+}

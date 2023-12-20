@@ -33,6 +33,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($start_time) && !empty($end_time) && strtotime($start_time) >= strtotime($end_time)) {
         $end_time_err = "Czas zakończenia musi być późniejszy niż czas rozpoczęcia.";
     }
+    
+    $currentDateTime = date('Y-m-d H:i:s');
+
+    if (!empty($start_time) && strtotime($start_time) < strtotime($currentDateTime)) {
+        $start_time_err = "Czas rozpoczęcia nie może być w przeszłości.";
+    }
 
     if (empty($start_time_err) && empty($end_time_err)) {
         $availability->dentist_id = $dentist_id;

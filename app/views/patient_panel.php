@@ -6,6 +6,19 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION
     exit;
 }
 
+require_once '../../config/database.php';
+require_once '../models/appointment.php';
+
+// Utworzenie obiektu bazy danych
+$database = new Database();
+$db = $database->getConnection();
+
+// Tworzenie instancji klasy Appointment
+$appointment = new Appointment($db);
+
+// Pobieranie wizyt pacjenta
+$patientAppointments = $appointment->getPatientAppointments($_SESSION['user_id']);
+
 
 $update_err = "";
 if (isset($_SESSION['update_err'])) {
@@ -18,9 +31,6 @@ if (isset($_SESSION['$password_err'])) {
     $password_err = $_SESSION['$password_err'];
     unset($_SESSION['$password_err']); // Czyszczenie błędu z sesji
 }
-// Tutaj możesz załadować dane pacjenta z bazy danych
-// $upcomingAppointments = loadUpcomingAppointments($_SESSION["id"]);
-// $pastAppointments = loadPastAppointments($_SESSION["id"]);
 
 ?>
 
@@ -35,6 +45,7 @@ if (isset($_SESSION['$password_err'])) {
     <link rel="stylesheet" href="../../public/css/patient_panel.css">
     <link rel="stylesheet" href="../../public/css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -53,17 +64,33 @@ if (isset($_SESSION['$password_err'])) {
                 </div>
 
                 <div class="card">
-                    <h2>Zaplanowane wizyty:</h2>
-                    <p>Coś tutaj pusto :)</p>
-                    <?php //echo $upcomingAppointments; 
-                    ?>
-                </div>
-
-                <div class="card">
-                    <h2>Historia wizyt:</h2>
-                    <p>Coś tutaj pusto :)</p>
-                    <?php //echo $pastAppointments; 
-                    ?>
+                    <div class="row">
+                        <div class="col-md-7 text-center">
+                            <h2>Twoje wizyty:</h2>
+                        </div>
+                        <div class="col-md-5">
+                            <button onclick="toggleSection('new-appointment', true);" class="btn btn-primary m-1 w-100">Zarezerwuj nową wizytę</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <div class="table-responsive">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover" id="appointments-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Data wizyty</th>
+                                            <th>Lekarz</th>
+                                            <th>Status</th>
+                                            <th>Akcja</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Tutaj pojawia się tabela z danymi generowanymi dynamicznie z użyciem AJAX -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card">
@@ -150,25 +177,27 @@ if (isset($_SESSION['$password_err'])) {
                         </div>
                     </form>
                 </div>
+
+                <div class="card" id="new-appointment" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h2 class="text-center">Kalendarz dostępności lekarzy:</h2>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button" onclick="toggleSection('new-appointment', false);" class="btn btn-secondary m-2 w-100">Ukryj</button>
+                        </div>
+                    </div>
+                    <br>
+                    <div id="calendar" data-patient-id="<?php echo $_SESSION['user_id']; ?>"></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        function toggleSection(sectionId, show) {
-            var section = document.getElementById(sectionId);
-            if (section) {
-                section.style.display = show ? 'block' : 'none';
 
-                if (show) {
-                    section.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            }
-        }
-    </script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+    <script src='/gabinet/public/js/patient_panel.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 

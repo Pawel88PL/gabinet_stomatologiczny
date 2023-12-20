@@ -67,15 +67,36 @@ class Availability
 
     public function getAllAvailability($dentist_id)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE dentist_id = :dentist_id";
+        // Pobierz bieżącą datę i godzinę
+        $currentDateTime = date('Y-m-d H:i:s');
+        error_log($currentDateTime);
+
+        $query = "SELECT * FROM " . $this->table_name . " WHERE dentist_id = :dentist_id AND end_time >= :currentDateTime ORDER BY start_time ASC";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':dentist_id', $dentist_id);
+        $stmt->bindParam(':currentDateTime', $currentDateTime);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getFutureAvailability()
+    {
+        $currentDate = date('Y-m-d H:i:s');
+
+        $query = "SELECT a.availability_id, a.dentist_id, a.start_time, a.end_time, d.first_name, d.last_name 
+              FROM " . $this->table_name . " a 
+              JOIN dentists d ON a.dentist_id = d.dentist_id 
+              WHERE a.start_time > :currentDate 
+              ORDER BY a.start_time ASC";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':currentDate', $currentDate);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 
     public function delete()
