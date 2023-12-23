@@ -79,7 +79,8 @@ if (isset($_SESSION['$password_err'])) {
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="filterDropdown">
                                     <li><a class="dropdown-item" href="#" onclick="loadAppointments('scheduled')">Zaplanowane</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled')">Anulowane</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_patient')">Odwołane przez pacjenta</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_dentist')">Odwołane przez dentyste</a></li>
                                     <li><a class="dropdown-item" href="#" onclick="loadAppointments('')">Wszystkie</a></li>
                                 </ul>
                             </div>

@@ -28,15 +28,16 @@ if ($dentist_data === false) {
 
 // Przywitanie lekarza
 $firstName = htmlspecialchars($_SESSION["first_name"]);
+$lastName = htmlspecialchars($_SESSION["last_name"]);
 $lastChar = strtolower(substr($firstName, -1)); // Pobiera ostatni znak imienia
 
 // Przykładowa logika do określenia płci na podstawie ostatniej litery imienia
 if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
     // Prawdopodobnie kobieta
-    $greeting = "Witam Pani doktor!";
+    $greeting = "Dzień dobry Pani doktor ";
 } else {
     // Prawdopodobnie mężczyzna
-    $greeting = "Witam Pana doktora!";
+    $greeting = "Dzień dobry doktorze ";
 }
 ?>
 
@@ -52,6 +53,7 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
     <link rel="stylesheet" href="../../public/css/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -61,10 +63,49 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card text-center" id="profile-section">
-                    <h2><?php echo $greeting; ?> <strong>Dr. <?php echo $firstName; ?></strong>, oto twój panel!</h2>
-                    <p>Twój numer identyfikacyjny w naszym gabinecie stomatologicznym to: <strong><?php echo htmlspecialchars($_SESSION["user_id"]); ?></strong></p>
+                    <h2><?php echo $greeting; ?> <strong><?php echo $firstName . " " . $lastName; ?></strong></h2>
                 </div>
 
+                <div class="card">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h2>Wizyty:</h2>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="dropdown">
+                                <button class="btn btn-success dropdown-toggle w-100" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Filtruj wizyty
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('scheduled')">Zaplanowane</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_patient')">Odwołane przez pacjenta</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_dentist')">Odwołane przez dentystę</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('')">Wszystkie</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabela z wizytami, z możliwością sortowania po kliknięciu przycisku obok nagłówków -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="appointments-table">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="align-middle">Data i godzina wizyty <button class="btn btn-light btn-sm" onclick="sortAppointments('date')"><i class="bi bi-sort-down"></i></button></th>
+                                    <th class="align-middle">Pacjent <button class="btn btn-light btn-sm" onclick="sortAppointments('patient')"><i class="bi bi-sort-alpha-down"></i></button></th>
+                                    <th class="align-middle">Status</th>
+                                    <th class="align-middle">Akcja</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Tutaj pojawia się tabela z wizytami, która jest generowanymi dynamicznie z użyciem AJAX -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <!-- Tabela wyświetlająca dostępność -->
                 <div class="card">
                     <?php if (!empty($_SESSION['start_time_err'])) : ?>
                         <div class="alert alert-danger"><?php echo $_SESSION['start_time_err']; ?></div>
@@ -82,7 +123,7 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
                     <div class="availability-section">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h2>Twoja aktualna dostępność:</h2>
+                                <h2>Dostępność:</h2>
                             </div>
                             <div class="col-sm-6">
                                 <div class="row">
@@ -125,6 +166,26 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
                     </div>
                 </div>
 
+
+                <!-- Sekcja z danymi osobowymi -->
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Dane:</h2>
+                        <div class="row mb-3">
+                            <div class="col-lg-4">
+                                <p><strong>Imię:</strong> <?php echo htmlspecialchars($_SESSION["first_name"]); ?></p>
+                                <p><strong>Nazwisko:</strong> <?php echo htmlspecialchars($_SESSION["last_name"]); ?></p>
+                                <p><strong>E-mail:</strong> <?php echo htmlspecialchars($_SESSION["email"]); ?></p>
+                            </div>
+                            <div>
+                                <p><strong>W celu zmiany danych osobowych skontaktuj się z administratorem systemu.</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Ukryta sekcja do edycji dostępności -->
                 <div class="card" id="edit-availability-section" style="display: none; padding-top:6rem">
                     <h3>Edytuj Dostępność</h3>
                     <form id="edit-availability-form" action="../controllers/dentist_availability_controller.php" method="post">
@@ -142,6 +203,8 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
                     </form>
                 </div>
 
+
+                <!-- Ukryta sekcja do dodania nowej dostępności -->
                 <div class="card" id="add-availability-section" style="display: none; padding-top:6rem">
                     <h4>Dodaj kolejną dostępność:</h4>
                     <form action="../controllers/dentist_availability_controller.php" method="post">
@@ -160,37 +223,6 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
                     </form>
                 </div>
 
-                <div class="card">
-                    <h2>Zaplanowane wizyty:</h2>
-                    <p>Coś tutaj pusto :)</p>
-                    <?php //echo $upcomingAppointments; 
-                    ?>
-                </div>
-
-                <div class="card">
-                    <h2>Historia wizyt:</h2>
-                    <p>Coś tutaj pusto :)</p>
-                    <?php //echo $pastAppointments; 
-                    ?>
-                </div>
-
-                <div class="card">
-                    <div class="card-body">
-
-
-                        <h2 class="card-title">Twoje dane:</h2>
-                        <div class="row mb-3">
-                            <div class="col-lg-4">
-                                <p><strong>Imię:</strong> <?php echo htmlspecialchars($_SESSION["first_name"]); ?></p>
-                                <p><strong>Nazwisko:</strong> <?php echo htmlspecialchars($_SESSION["last_name"]); ?></p>
-                                <p><strong>E-mail:</strong> <?php echo htmlspecialchars($_SESSION["email"]); ?></p>
-                            </div>
-                            <div>
-                                <p><strong>W celu zmiany danych osobowych skontaktuj się z administratorem systemu.</strong></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -253,7 +285,7 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
             }
         }
     </script>
-
+    <script src='/gabinet/public/js/dentist_panel.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 

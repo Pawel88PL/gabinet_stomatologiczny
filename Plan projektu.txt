@@ -28,11 +28,14 @@
       - Zapewnić, aby po zarezerwowaniu termin stał się niedostępny dla innych użytkowników. --> ZROBIONE
    d) Przeglądanie i zarządzanie wizytami:
       - Dodać opcje anulowania wizyty z odpowiednią aktualizacją w bazie danych. --> ZROBIONE
-      - Stworzyć widok przeglądania nadchodzących i przeszłych wizyt, z opcjami sortowania i filtrowania.
+      - Stworzyć widok przeglądania nadchodzących i przeszłych wizyt, z opcjami sortowania i filtrowania. --> ZROBIONE
 
-6. **Powiadomienia:**
-   - Rozważ zaimplementowanie systemu powiadomień e-mailowych lub SMS-owych za pomocą zewnętrznego API, np. Twilio dla SMS-ów lub SMTP dla e-maili.
-   - Ustaw automatyczne przypomnienia o zbliżających się wizytach, które będą wysyłane do pacjentów i dentystów.
+6. Panel dentysty:
+   - Zaimplementować tabelę, która będzie wyświetlała umówione wizyty. --> ZROBIONE
+   - Umożwilić anulowanie zaplanowanej wizyty przez dentysę. --> ZROBIONE
+   - Dodać możwiwość filtrowania i sortowania wizyt.  --> ZROBIONE
+   - Dodać funkcję potwierdzenia przez dentystę, że wizyta się odbyła.
+   - Umożliwić pobranie wszystkich wizyt do pliku CSV.
 
 7. **Dokumentacja i komentarze projektu:**
    - Dokumentuj swój kod i procedury, aby ułatwić zarówno bieżące zarządzanie, jak i ewentualne przyszłe rozbudowy projektu.

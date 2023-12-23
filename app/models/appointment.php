@@ -16,9 +16,9 @@ class Appointment
         $this->conn = $db;
     }
 
-    public function cancel()
+    public function cancelByPatient()
     {
-        $query = "UPDATE " . $this->table_name . " SET status = 'cancelled' WHERE appointment_id = :appointment_id";
+        $query = "UPDATE " . $this->table_name . " SET status = 'cancelled_by_patient' WHERE appointment_id = :appointment_id";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":appointment_id", $this->appointment_id);
@@ -29,6 +29,18 @@ class Appointment
         return false;
     }
 
+    public function cancelByDentist()
+    {
+        $query = "UPDATE " . $this->table_name . " SET status = 'cancelled_by_dentist' WHERE appointment_id = :appointment_id";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":appointment_id", $this->appointment_id);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
 
     public function create()
     {
@@ -83,4 +95,48 @@ class Appointment
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getAppointmentsByDentist($dentistId)
+    {
+        $query = "SELECT a.appointment_id, a.appointment_date, a.status, p.first_name, p.last_name 
+              FROM appointments a 
+              JOIN patients p ON a.patient_id = p.patient_id 
+              WHERE a.dentist_id = :dentistId
+              ORDER BY a.appointment_date ASC";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':dentistId', $dentistId);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function changeStatus($appointmentId, $newStatus)
+    {
+        $sql = "UPDATE appointments SET status = :newStatus WHERE appointment_id = :appointmentId";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':newStatus', $newStatus);
+        $stmt->bindParam(':appointmentId', $appointmentId);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0;
+    }
+
+    public function updateStatusToCompleted()
+    {
+        $currentTime = new DateTime();
+        $currentTime->modify('-1 hour');
+        $formattedCurrentTime = $currentTime->format('Y-m-d H:i:s');
+
+        $sql = "UPDATE appointments 
+                SET status = 'completed' 
+                WHERE status = 'scheduled' AND appointment_date <= :currentTime";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':currentTime', $formattedCurrentTime, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->rowCount();
+    }
+
 }

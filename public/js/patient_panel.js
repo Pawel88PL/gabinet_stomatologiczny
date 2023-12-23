@@ -119,30 +119,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function cancelAppointment(appointmentId) {
     Swal.fire({
-        title: 'Czy na pewno chcesz anulować wizytę?',
+        title: 'Czy na pewno chcesz odwołać zaplanowaną wizytę?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Tak, anuluj',
+        confirmButtonText: 'Tak, odwołaj',
         cancelButtonText: 'Nie'
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/gabinet/app/controllers/cancel_appointment.php',
+                url: '/gabinet/app/controllers/patient_cancel_appointment.php',
                 type: 'POST',
                 data: { appointment_id: appointmentId },
                 success: function (response) {
                     const data = JSON.parse(response);
                     Swal.fire(
-                        'Anulowano!',
+                        'Odwołano!',
                         data.message,
                         'success'
-                    ).then(() => {
-                        setTimeout(() => {
-                            $("#appointment-row-" + appointmentId).remove();
-                        }, 5000);
-                    });
+                    );
                     loadAppointments();
                     refreshCalendar();
                 },
@@ -162,7 +158,7 @@ var globalAppointments = []; // Przechowuje wszystkie wizyty
 
 function loadAppointments(filterStatus = 'scheduled', isInitialLoad = false) {
     $.ajax({
-        url: '/gabinet/app/controllers/get_appointments.php',
+        url: '/gabinet/app/controllers/get_patient_appointments.php',
         type: 'GET',
         success: function (response) {
             globalAppointments = JSON.parse(response);
@@ -197,9 +193,9 @@ function renderTable(appointments, filterStatus = 'scheduled') {
             html += '<td>' + appointment.first_name + ' ' + appointment.last_name + '</td>';
             html += '<td>' + formatAppointmentStatus(appointment.status) + '</td>';
             if (appointment.status === 'scheduled') {
-                html += '<td><button class="btn btn-danger" onclick="cancelAppointment(' + appointment.appointment_id + ')">Anuluj</button></td>';
+                html += '<td><button class="btn btn-danger" onclick="cancelAppointment(' + appointment.appointment_id + ')">Odwołaj</button></td>';
             } else {
-                html += '<td></td>'; // Puste pole, jeśli wizyta nie jest zaplanowana
+                html += '<td></td>';
             }
             html += '</tr>';
         }
@@ -213,8 +209,14 @@ function formatAppointmentStatus(status) {
     switch (status) {
         case 'scheduled':
             return 'Zaplanowana';
-        case 'cancelled':
-            return 'Anulowana';
+        case 'completed':
+            return 'Wykonana';
+        case 'no_show':
+            return 'Pacjent nie stawił się';
+        case 'cancelled_by_patient':
+            return 'Odwołana przez pacjenta';
+        case 'cancelled_by_dentist':
+            return 'Odwołana przez dentystę';
         default:
             return 'Inny status';
     }
