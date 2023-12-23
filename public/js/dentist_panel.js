@@ -79,7 +79,8 @@ function changeAppointmentStatus(appointmentId, newStatus) {
 
 var globalAppointments = [];
 
-function loadAppointments(filterStatus = 'scheduled', isInitialLoad = false) {
+function loadAppointments(filterStatus = 'scheduled', isInitialLoad = false, filterText = 'zaplanowane') {
+    document.getElementById('appointmentsHeader').textContent = 'Wizyty ' + filterText;
     $.ajax({
         url: '/gabinet/app/controllers/get_dentist_appointments.php',
         type: 'GET',

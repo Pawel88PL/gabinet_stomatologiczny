@@ -69,7 +69,7 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
                 <div class="card">
                     <div class="row">
                         <div class="col-md-8">
-                            <h2>Wizyty:</h2>
+                            <h2 id="appointmentsHeader"></h2>
                         </div>
                         <div class="col-md-4">
                             <div class="dropdown">
@@ -77,10 +77,10 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
                                     Filtruj wizyty
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="filterDropdown">
-                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('scheduled')">Zaplanowane</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_patient')">Odwołane przez pacjenta</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_dentist')">Odwołane przez dentystę</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('')">Wszystkie</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('scheduled', false, 'zaplanowane:')">Zaplanowane</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_patient', false, 'odwołane przez pacjenta:')">Odwołane przez pacjenta</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_dentist', false, 'odwołane przez dentystę:')">Odwołane przez dentystę</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('', false, 'wszystkie:')">Wszystkie</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -167,24 +167,6 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
                 </div>
 
 
-                <!-- Sekcja z danymi osobowymi -->
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title">Dane:</h2>
-                        <div class="row mb-3">
-                            <div class="col-lg-4">
-                                <p><strong>Imię:</strong> <?php echo htmlspecialchars($_SESSION["first_name"]); ?></p>
-                                <p><strong>Nazwisko:</strong> <?php echo htmlspecialchars($_SESSION["last_name"]); ?></p>
-                                <p><strong>E-mail:</strong> <?php echo htmlspecialchars($_SESSION["email"]); ?></p>
-                            </div>
-                            <div>
-                                <p><strong>W celu zmiany danych osobowych skontaktuj się z administratorem systemu.</strong></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
                 <!-- Ukryta sekcja do edycji dostępności -->
                 <div class="card" id="edit-availability-section" style="display: none; padding-top:6rem">
                     <h3>Edytuj Dostępność</h3>
@@ -221,6 +203,24 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
                         <button type="submit" class="btn btn-primary">Dodaj dostępność</button>
                         <button type="button" class="btn btn-secondary" onclick="toggleSection('add-availability-section', false)">Anuluj</button>
                     </form>
+                </div>
+
+
+                <!-- Sekcja z danymi osobowymi -->
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Dane:</h2>
+                        <div class="row mb-3">
+                            <div class="col-lg-4">
+                                <p><strong>Imię:</strong> <?php echo htmlspecialchars($_SESSION["first_name"]); ?></p>
+                                <p><strong>Nazwisko:</strong> <?php echo htmlspecialchars($_SESSION["last_name"]); ?></p>
+                                <p><strong>E-mail:</strong> <?php echo htmlspecialchars($_SESSION["email"]); ?></p>
+                            </div>
+                            <div>
+                                <p><strong>W celu zmiany danych osobowych skontaktuj się z administratorem systemu.</strong></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>

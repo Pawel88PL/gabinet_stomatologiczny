@@ -69,8 +69,8 @@ if (isset($_SESSION['$password_err'])) {
 
                 <div class="card">
                     <div class="row">
-                        <div class="col-md-8 text-center">
-                            <h2>Twoje wizyty:</h2>
+                        <div class="col-md-8">
+                            <h2 id="appointmentsHeader"></h2>
                         </div>
                         <div class="col-md-4">
                             <div class="dropdown">
@@ -78,10 +78,10 @@ if (isset($_SESSION['$password_err'])) {
                                     Filtruj wizyty
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="filterDropdown">
-                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('scheduled')">Zaplanowane</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_patient')">Odwołane przez pacjenta</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_dentist')">Odwołane przez dentyste</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('')">Wszystkie</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('scheduled', false, 'zaplanowane:')">Zaplanowane</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_patient', false, 'odwołane przeze mnie:')">Odwołane przeze mnie</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_dentist', false, 'odwołane przez dentystę:')">Odwołane przez dentystę</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('', false, 'wszystkie:')">Wszystkie</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -133,7 +133,7 @@ if (isset($_SESSION['$password_err'])) {
                             </div>
                         <?php endif; ?>
 
-                        <h2 class="card-title">Twoje dane:</h2>
+                        <h2 class="card-title">Dane:</h2>
                         <div class="row mb-3">
                             <div class="col-lg-4">
                                 <p><strong>Imię:</strong> <?php echo htmlspecialchars($_SESSION["first_name"]); ?></p>

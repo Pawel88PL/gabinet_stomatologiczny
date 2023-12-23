@@ -156,7 +156,8 @@ function cancelAppointment(appointmentId) {
 
 var globalAppointments = []; // Przechowuje wszystkie wizyty
 
-function loadAppointments(filterStatus = 'scheduled', isInitialLoad = false) {
+function loadAppointments(filterStatus = 'scheduled', isInitialLoad = false, filterText = 'zaplanowane:') {
+    document.getElementById('appointmentsHeader').textContent = 'Wizyty ' + filterText;
     $.ajax({
         url: '/gabinet/app/controllers/get_patient_appointments.php',
         type: 'GET',
