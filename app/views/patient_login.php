@@ -41,10 +41,13 @@ if (isset($_SESSION['password_err'])) {
                     <div class="card-body">
                         <h2 class="card-title text-center">Logowanie</h2>
                         <?php
+                        // Wyświetlenie komunikatu o błędzie logowania
                         if (!empty($login_err)) {
                             echo '<div class="alert alert-danger">' . $login_err . '</div>';
                         }
                         ?>
+
+                        <!-- Formularz logowania pacjenta -->
                         <form action="../controllers/patient_login_controller.php" method="post">
                             <div class="form-group mb-3">
                                 <label class="form-label">Email</label>

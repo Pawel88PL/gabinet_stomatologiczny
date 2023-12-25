@@ -1,3 +1,11 @@
+<!-- 
+**********
+
+    Pasek nawigacyjny, który jest wyświetlany na każdej stronie 'shared_navbar.php'.
+
+**********
+-->
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container-fluid">
         <a class="btn btn-light btn-lg" href="/gabinet/index.php">DENTLUX</a>
@@ -26,7 +34,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <?php
-                            // sprawdzenie roli i wyświetlenie odpowiedniego panelu
+                            // Sprawdzenie roli i wyświetlenie odpowiedniego panelu
                             if (isset($_SESSION['role'])) {
                                 switch ($_SESSION['role']) {
                                     case 'administrator':
@@ -47,7 +55,9 @@
             </ul>
             <span class="nav-item">
                 <?php
+                // Sprawdzenie czy użytkownik jest zalogowany
                 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
+                    // Przypisanie zmiennej $firstName wartości z sesji lub domyślnej wartości
                     $firstName = $_SESSION['first_name'] ?? 'Gość';
                     $role = $_SESSION['role'] ?? 'nieokreślona rola';
 
@@ -66,12 +76,14 @@
                             $translatedRole = 'nieokreślona rola';
                     }
 
+                    // Wyświetlenie powitania
                     echo "Witaj <strong>" . htmlspecialchars($firstName) . "</strong>! Jesteś zalogowany/a jako <strong>" . htmlspecialchars($translatedRole) . "</strong>.";
                 }
                 ?>
             </span>
             <span class="nav-item">
                 <?php
+                // Wyświetlenie przycisku wylogowania jeśli użytkownik jest zalogowany
                 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
                     echo '<a class="btn btn-light" href="/gabinet/app/controllers/logout_controller.php">Wyloguj się</a>';
                 }

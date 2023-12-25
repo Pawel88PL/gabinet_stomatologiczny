@@ -1,45 +1,49 @@
 <?php
-error_log("Formularz logowania został wysłany.");
-error_log("Email: " . $_POST['email']);
+error_log("Formularz logowania został wysłany."); // Logowanie wysłania formularza
+error_log("Email: " . $_POST['email']); // Logowanie adresu email
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+ini_set('display_errors', 1); // Włączenie wyświetlania błędów
+ini_set('display_startup_errors', 1); // Włączenie wyświetlania błędów uruchamiania
+error_reporting(E_ALL); // Ustawienie poziomu raportowania błędów
 
-session_start();
-// Załączanie pliku konfiguracyjnego i klasy użytkownika
+session_start(); // Rozpoczęcie nowej sesji lub wznowienie istniejącej
+
+// Dołączenie plików konfiguracyjnych i modelu 'patient'
 require_once '../../config/database.php';
 require_once '../models/patient.php';
 
 $database = new Database();
-$db = $database->getConnection();
+$db = $database->getConnection(); // Utworzenie połączenia z bazą danych
 
-$email = $password = "";
-$email_err = $password_err = "";
+$email = $password = ""; // Inicjalizacja zmiennych
+$email_err = $password_err = ""; // Inicjalizacja zmiennych błędów
 
+// Przetwarzanie danych formularza po jego wysłaniu
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    // Walidacja emaila
     if (empty(trim($_POST["email"]))) {
         $email_err = "Proszę podać email.";
     } else {
         $email = trim($_POST["email"]);
     }
 
+    // Walidacja hasła
     if (empty(trim($_POST["password"]))) {
         $password_err = "Proszę podać hasło.";
     } else {
         $password = trim($_POST["password"]);
     }
 
-    // Po próbie logowania
+    // Próba logowania po walidacji
     if (empty($email_err) && empty($password_err)) {
         $user = new Patient($db);
         if ($user->login($email, $password)) {
-            // Przekierowanie do panelu użytkownika
+            // Przekierowanie do panelu pacjenta
             header("location: ../views/patient_panel.php");
             exit;
         } else {
-            // Przekazanie błędu do sesji i przekierowanie z powrotem do formularza logowania
+            // Przekazanie błędu logowania do sesji i przekierowanie z powrotem do formularza logowania
             $_SESSION['login_err'] = "Niepoprawny email lub hasło.";
             header("location: ../views/patient_login.php");
             exit;
@@ -52,7 +56,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-
-    // Zamykanie połączenia z bazą danych
+    // Zamknięcie połączenia z bazą danych
     unset($db);
 }

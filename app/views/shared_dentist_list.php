@@ -1,9 +1,16 @@
+<!-- Lista lekarzy dentystów, która jest plikiem udostępnianym 'shared' -->
+
 <?php
-// Załączenie pliku klasy Dentist i inicjalizacja obiektu
+
+// Załadowanie pliku konfiguracyjnego bazy danych i klas modelu
 require_once '../../config/database.php';
 require_once '../models/dentist.php';
+
+// Inicjalizacja obiektu bazy danych i konfiguracja połączenia
 $database = new Database();
 $db = $database->getConnection();
+
+// Inicjalizacja obiektu dentysty
 $dentist = new Dentist($db);
 
 // Pobranie listy dentystów
@@ -37,13 +44,17 @@ echo "</tbody>";
 echo "</table>";
 echo "</div>";
 ?>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js" integrity="sha256-IW9RTty6djbi3+dyypxajC14pE6ZrP53DLfY9w40Xn4=" crossorigin="anonymous"></script>
+
 <script>
+    // Zapytanie potwierdzające usunięcie dentysty
     document.querySelectorAll('.delete-btn').forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
             const dentistId = this.getAttribute('data-id');
 
+            // Wyświetlenie okna dialogowego pytającego o potwierdzenie usunięcia
             Swal.fire({
                 title: "Jesteś pewien?",
                 text: "Tej operacji nie można cofnąć.",

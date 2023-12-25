@@ -1,9 +1,10 @@
 <?php
 
-session_start();
+session_start(); // Start sesji
 
 // Sprawdzanie, czy użytkownik ma uprawnienia administracyjne
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["role"] !== 'administrator') {
+    // Przekierowanie na stronę logowania, jeśli użytkownik nie jest zalogowany i nie ma uprawnień administratora
     header("location: dentist_login.php");
     exit;
 }
@@ -108,6 +109,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION
     
     
     <script>
+        // Funkcja do pokazywania/ukrywania sekcji
         function toggleSection(sectionId, show) {
             var section = document.getElementById(sectionId);
             if (section) {

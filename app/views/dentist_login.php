@@ -1,8 +1,10 @@
 <?php
 session_start();
-// Sprawdzanie, czy są błędy logowania do wyświetlenia
+
+// Zainicjowanie zmiennych jako pusty ciąg znaków
 $email_err = $password_err = $login_err = "";
 
+// Sprawdzenie czy są ustawione zmienne o błędach w sesji
 if (isset($_SESSION['login_err'])) {
     $login_err = $_SESSION['login_err'];
     unset($_SESSION['login_err']);
@@ -40,11 +42,15 @@ if (isset($_SESSION['password_err'])) {
                 <div class="card my-5">
                     <div class="card-body">
                         <h2 class="card-title text-center">Dostęp tylko dla pracowników</h2>
+                        
                         <?php
+                        // Wyświetlenie komunikatu o błędzie logowania
                         if (!empty($login_err)) {
                             echo '<div class="alert alert-danger">' . $login_err . '</div>';
                         }
                         ?>
+                        
+                        <!-- Formularz logowania -->
                         <form action="../controllers/dentist_login_controller.php" method="post">
                             <div class="form-group mb-3">
                                 <label class="form-label">Email</label>

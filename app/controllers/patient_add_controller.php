@@ -4,86 +4,83 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once '../../config/database.php'; // Ustaw prawidłową ścieżkę do pliku z klasą Database.
+require_once '../../config/database.php'; // Dołączanie pliku konfiguracyjnego bazy danych
 
 $database = new Database();
 $db = $database->getConnection();
 
-// Define variables and initialize with empty values
+// Definiowanie zmiennych i inicjalizacja pustymi wartościami
 $first_name = $last_name = $email = $password = "";
 $first_name_err = $last_name_err = $email_err = $password_err = "";
 
-// Processing form data when form is submitted
+// Przetwarzanie danych formularza po jego wysłaniu
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Validate first name
+    // Walidacja imienia
     if (empty(trim($_POST["first_name"]))) {
         $first_name_err = "Proszę podać imię.";
     } else {
         $first_name = trim($_POST["first_name"]);
     }
 
-    // Validate last name
+    // Walidacja nazwiska
     if (empty(trim($_POST["last_name"]))) {
         $last_name_err = "Proszę podać nazwisko.";
     } else {
         $last_name = trim($_POST["last_name"]);
     }
 
-    // Validate email
+    // Walidacja adresu email
     if (empty(trim($_POST["email"]))) {
         $email_err = "Proszę podać adres email.";
     } else {
         $email = trim($_POST["email"]);
     }
 
-    // Validate password
+    // Walidacja hasła
     if (empty(trim($_POST["password"]))) {
         $password_err = "Proszę wpisać hasło.";
     } else {
         $password = trim($_POST["password"]);
     }
 
-    // Check input errors before inserting in database
+    // Sprawdzenie błędów przed dodaniem do bazy danych
     if (empty($first_name_err) && empty($last_name_err) && empty($email_err) && empty($password_err)) {
 
-        // Prepare an insert statement
+        // Przygotowanie zapytania SQL do wstawienia danych
         $sql = "INSERT INTO patients (first_name, last_name, email, password) VALUES (:first_name, :last_name, :email, :password)";
 
         if ($stmt = $db->prepare($sql)) {
-            // Bind variables to the prepared statement as parameters
+            // Przypisywanie zmiennych do przygotowanego zapytania jako parametrów
             $stmt->bindParam(":first_name", $param_first_name);
             $stmt->bindParam(":last_name", $param_last_name);
             $stmt->bindParam(":email", $param_email);
             $stmt->bindParam(":password", $param_password);
 
-            // Set parameters
+            // Ustawienie parametrów
             $param_first_name = $first_name;
             $param_last_name = $last_name;
             $param_email = $email;
-            $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
+            $param_password = password_hash($password, PASSWORD_DEFAULT); // Hashowanie hasła
 
-            // Tuż po wywołaniu execute()
+            // Wykonanie zapytania
             if ($stmt->execute()) {
-                // Redirect to login page
+                // Przekierowanie do strony logowania
                 header("Location: ../views/patient_login.php");
-                exit(); // Zatrzymaj wykonanie skryptu
+                exit(); // Zakończenie skryptu
             } else {
                 echo "Execute failed: " . $stmt->errorInfo()[2];
             }
 
-
-            // Close statement
+            // Zamknięcie zapytania
             $stmt = null;
         }
     }
 
-    // Close connection
+    // Zamknięcie połączenia
     $db = null;
 
-    // Na końcu register_controller.php, przed załadowaniem widoku
-
-    // Przekazanie zmiennych do widoku
+    // Przekazywanie danych do widoku
     $viewData = [
         'first_name' => $first_name,
         'first_name_err' => $first_name_err,
@@ -92,9 +89,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'email' => $email,
         'email_err' => $email_err,
         'password_err' => $password_err,
-        // ... inne potrzebne zmienne
     ];
 
-    // Załaduj widok i przekaż dane
+    // Załadowanie widoku i przekazanie danych
     require_once '../views/patient_register.php';
 }

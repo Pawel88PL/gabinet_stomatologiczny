@@ -1,30 +1,38 @@
 <?php
-session_start();
+session_start(); // Start sesji
 
+// Sprawdzanie, czy użytkownik ma uprawnienia administracyjne
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["role"] !== 'administrator') {
     header("location: dentist_login.php");
     exit;
 }
 
-
+// Komunikat o błędzie edycji danych
 $update_err = "";
 if (isset($_SESSION['update_err'])) {
     $update_err = $_SESSION['update_err'];
     unset($_SESSION['update_err']); // Czyszczenie błędu z sesji
 }
 
+// Pobranie danych dentysty o podanym ID
 if (isset($_GET['dentist_id'])) {
     $dentist_id = $_GET['dentist_id'];
 
+    // Zaimportowanie pliku konfiguracyjnego bezy danych i modelu dentysty
     require_once '../../config/database.php';
     require_once '../models/dentist.php';
 
+    // Inicjalizacja połączenia z bazą danych
     $database = new Database();
     $db = $database->getConnection();
+    
+    // Inicjalizacja obiektu dentysty
     $dentist = new Dentist($db);
 
+    // Pobranie danych dentysty o podanym ID
     $dentist_data = $dentist->getDentistById($dentist_id);
 
+    // Sprawdzenie, czy dentysta o podanym ID istnieje
     if ($dentist_data === false) {
         exit('Dentysta o podanym ID nie został znaleziony.');
     }

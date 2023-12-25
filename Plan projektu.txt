@@ -1,14 +1,14 @@
-1. **Zarządzanie profilami pacjentów:                                     --> ZROBIONE
-    - Umożliw pacjentom przeglądanie i edycję swoich danych osobowych.    --> ZROBIONE
-    - Dodaj funkcjonalność zmiany hasła.                                  --> ZROBIONE
+1. Zarządzanie profilami pacjentów:
+    - Umożliwić pacjentom przeglądanie i edycję swoich danych osobowych. --> ZROBIONE
+    - Dodać funkcjonalność zmiany hasła dla pacjentów. --> ZROBIONE
 
-2. **Funkcje zarządzania dentystami:**
-   - Stworzenie modelu `Dentist` w PHP, który będzie odpowiadać za zarządzanie danymi dentystów w bazie danych. --> ZROBIONE
-   - Widok panelu administracyjnego, gdzie administrator może dodawać, edytować i usuwać profile dentystów. --> ZROBIONE
+2. Funkcje zarządzania dentystami:
+   - Stworzyć model `Dentist`, który będzie zawierać niezbędne metody do zarządzania danymi dentystów w bazie danych. --> ZROBIONE
+   - Stworzyć widok panelu administracyjnego, gdzie administrator może dodawać, edytować i usuwać profile dentystów. --> ZROBIONE
 
-3. **System zarządzania dostępnością:**
-   - Tabela w bazie danych, która przechowuje informacje o dostępności każdego dentysty (np. dni pracy, godziny).  --> ZROBIONE
-   - Interfejs, w którym dentysta może dodać nową dostępność.  --> ZROBIONE
+3. System zarządzania dostępnością:
+   - Stworzyć tabelę w bazie danych, która przechowuje informacje o dostępności każdego dentysty (np. dni pracy, godziny).  --> ZROBIONE
+   - Interfejs, w którym dentysta może dodać swoją dostępność.  --> ZROBIONE
    - Możliwość edycji swojej dostępności.  --> ZROBIONE
    - Validacja czasów dostępności. --> ZROBIONE
    - Możliwość usunięcia swojej dostępności  --> ZROBIONE
@@ -16,29 +16,27 @@
 
 4. Rezerwacja wizyt:
    a) Rozwój Kalendarza Dostępności:
-      - Rozważ użycie istniejących bibliotek JavaScript, takich jak FullCalendar, do stworzenia interaktywnego kalendarza.
-      - Kalendarz powinien wyświetlać dostępne terminy, oparte na danych dostępności dentystów.
-      - Zapewnij, aby dane o dostępności były dynamicznie aktualizowane w kalendarzu.
+      - Zastosować bibliotekę JavaScript FullCalendar do stworzenia interaktywnego kalendarza. --> ZROBIONE
+      - Kalendarz powinien wyświetlać dostępne terminy, podzielone na sloty, oparte na danych dostępności dentystów. --> ZROBIONE
+      - Zapewnnić, aby dane o dostępności były dynamicznie aktualizowane w kalendarzu (AJAX) --> ZROBIONE
    b) Proces Rezerwacji:
-      - Umożliw pacjentom wybór dostępnego terminu wizyty w kalendarzu.
-      - Po wybraniu terminu, wyświetl formularz do potwierdzenia wizyty z wymaganymi informacjami (np. typ wizyty, dane osobowe).
-      - Weryfikuj dane wejściowe i przetwarzaj rezerwację, zapisując ją w bazie danych.
+      - Umożliwić pacjentom wybór dostępnego terminu wizyty w kalendarzu. --> ZROBIONE
+      - Po wybraniu terminu, wyświetlić powiadomienie z prośbą o potwierdzenia wizyty. --> ZROBIONE
+      - Zweryfikować dane wejściowe o rezerwacji, zapisując ją w bazie danych. --> ZROBIONE
    c) Aktualizacja Bazy Danych:
-      - Po zarezerwowaniu wizyty, odpowiednio zaktualizuj bazę danych, aby odzwierciedlić nowy status terminu.
-      - Zapewnij, aby po zarezerwowaniu termin stał się niedostępny dla innych użytkowników.
-   d) Interfejs Użytkownika:
-      - Upewnij się, że interfejs jest intuicyjny i łatwy w użyciu.
-      - Dostosuj wygląd kalendarza do ogólnego designu aplikacji.
-      - Rozważ dodanie opcji filtrowania i wyszukiwania w kalendarzu.
+      - Po zarezerwowaniu wizyty, odpowiednio zaktualizować bazę danych, aby odzwierciedlała nowy status terminu. --> ZROBIONE
+      - Zapewnić, aby po zarezerwowaniu termin stał się niedostępny dla innych użytkowników. --> ZROBIONE
+   d) Przeglądanie i zarządzanie wizytami:
+      - Dodać opcje anulowania wizyty z odpowiednią aktualizacją w bazie danych. --> ZROBIONE
+      - Stworzyć widok przeglądania nadchodzących i przeszłych wizyt, z opcjami sortowania i filtrowania. --> ZROBIONE
 
-
-5. **Przeglądanie i zarządzanie wizytami:**
-   - Stwórz widoki dla pacjentów do przeglądania ich nadchodzących i przeszłych wizyt, z opcjami sortowania i filtrowania.
-   - Dodaj opcje anulowania i zmiany terminów wizyt, z odpowiednimi aktualizacjami w bazie danych.
-
-6. **Powiadomienia:**
-   - Rozważ zaimplementowanie systemu powiadomień e-mailowych lub SMS-owych za pomocą zewnętrznego API, np. Twilio dla SMS-ów lub SMTP dla e-maili.
-   - Ustaw automatyczne przypomnienia o zbliżających się wizytach, które będą wysyłane do pacjentów i dentystów.
+6. Panel dentysty:
+   - Zaimplementować tabelę, która będzie wyświetlała umówione wizyty. --> ZROBIONE
+   - Umożwilić anulowanie zaplanowanej wizyty przez dentysę. --> ZROBIONE
+   - Dodać możwiwość filtrowania i sortowania wizyt.  --> ZROBIONE
+   - Zaimplementować funkcję, która automatycznie zmieni status wizyty zaplanowanej na wykonaną, jeśli czas zaplanowanej wizyty jest wcześniejszy o min 1 godzinę niż czas aktualny. --> ZROBIONE
+   - Dodać możliwość zmiany statusu wizyty z wykonanej na 'Pacjent nie stawił się'. --> ZROBIONE
+   - Umożliwić pobranie wszystkich wizyt do pliku CSV. --> ZROBIONE
 
 7. **Dokumentacja i komentarze projektu:**
    - Dokumentuj swój kod i procedury, aby ułatwić zarówno bieżące zarządzanie, jak i ewentualne przyszłe rozbudowy projektu.

@@ -1,11 +1,13 @@
 <?php
-session_start();
+session_start(); // Inicjowanie sesji
 
+// Sprawdzanie, czy użytkownik jest zalogowany i ma rolę pacjenta
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["role"] !== 'patient') {
     header("location: patient_login.php");
     exit;
 }
 
+// Dołączenie pliku z konfiguracją połączenia z bazą danych i klasą Appointment
 require_once '../../config/database.php';
 require_once '../models/appointment.php';
 
@@ -19,13 +21,16 @@ $appointment = new Appointment($db);
 // Pobieranie wizyt pacjenta
 $patientAppointments = $appointment->getPatientAppointments($_SESSION['user_id']);
 
-
+// Utworzenie zmiennej z pustym ciągiem znaków
 $update_err = "";
+
+// Sprawdzanie, czy są błędy edycji danych
 if (isset($_SESSION['update_err'])) {
     $update_err = $_SESSION['update_err'];
     unset($_SESSION['update_err']); // Czyszczenie błędu z sesji
 }
 
+// Sprawdzanie, czy są błędy zmiany hasła
 $password_err = "";
 if (isset($_SESSION['$password_err'])) {
     $password_err = $_SESSION['$password_err'];
@@ -45,6 +50,7 @@ if (isset($_SESSION['$password_err'])) {
     <link rel="stylesheet" href="../../public/css/patient_panel.css">
     <link rel="stylesheet" href="../../public/css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
@@ -57,39 +63,50 @@ if (isset($_SESSION['$password_err'])) {
                 <div class="card text-center" id="profile-section">
                     <h2>Cześć <strong><?php echo htmlspecialchars($_SESSION["first_name"]); ?></strong>, oto twój panel pacjenta!</h2>
                     <div class="row justify-content-center">
-                        <p class="col-md-8">
+                        <div class="col-md-8">
                             Możesz przeglądać w nim swoje wizyty, historie odbytych wizyt jak również możesz zmienić swoje dane osobowe i hasło.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="row">
-                        <div class="col-md-7 text-center">
-                            <h2>Twoje wizyty:</h2>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             <button onclick="toggleSection('new-appointment', true);" class="btn btn-primary m-1 w-100">Zarezerwuj nową wizytę</button>
                         </div>
                     </div>
-                    <div class="table-responsive">
-                        <div class="table-responsive">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover" id="appointments-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Data wizyty</th>
-                                            <th>Lekarz</th>
-                                            <th>Status</th>
-                                            <th>Akcja</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- Tutaj pojawia się tabela z danymi generowanymi dynamicznie z użyciem AJAX -->
-                                    </tbody>
-                                </table>
+                </div>
+
+                <!-- Tabela wizyt z możliwością sortowania i filtrowania -->
+                <div class="card">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h2 id="appointmentsHeader"></h2>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="dropdown">
+                                <button class="btn btn-success dropdown-toggle w-100" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Filtruj wizyty
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('scheduled', false, 'zaplanowane:')">Zaplanowane</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_patient', false, 'odwołane przeze mnie:')">Odwołane przeze mnie</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_dentist', false, 'odwołane przez dentystę:')">Odwołane przez dentystę</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('', false, 'wszystkie:')">Wszystkie</a></li>
+                                </ul>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="appointments-table">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="align-middle">Data i godzina wizyty <button class="btn btn-light btn-sm" onclick="sortAppointments('date')"><i class="bi bi-sort-down"></i></button></th>
+                                    <th class="align-middle">Lekarz <button class="btn btn-light btn-sm" onclick="sortAppointments('dentist')"><i class="bi bi-sort-alpha-down"></i></button></th>
+                                    <th class="align-middle">Status</th>
+                                    <th class="align-middle">Akcja</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Tutaj pojawiają się dane generowane dynamicznie z użyciem AJAX -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -121,7 +138,8 @@ if (isset($_SESSION['$password_err'])) {
                             </div>
                         <?php endif; ?>
 
-                        <h2 class="card-title">Twoje dane:</h2>
+                        <!-- Dane osobowe -->
+                        <h2 class="card-title">Dane:</h2>
                         <div class="row mb-3">
                             <div class="col-lg-4">
                                 <p><strong>Imię:</strong> <?php echo htmlspecialchars($_SESSION["first_name"]); ?></p>
@@ -136,6 +154,7 @@ if (isset($_SESSION['$password_err'])) {
                     </div>
                 </div>
 
+                <!-- Formularz edycji danych -->
                 <div class="card" id="edit-profile" style="display:none;">
                     <form action="../controllers/patient_update_controller.php" method="post" class="row g-3">
                         <div class="col-lg-4">
@@ -157,6 +176,7 @@ if (isset($_SESSION['$password_err'])) {
                     </form>
                 </div>
 
+                <!-- Formularz zmiany hasła -->
                 <div class="card" id="change-password" style="display:none;">
                     <form action="../controllers/patient_change_password_controller.php" method="post">
                         <div class="form-group">
@@ -178,6 +198,7 @@ if (isset($_SESSION['$password_err'])) {
                     </form>
                 </div>
 
+                <!-- Kalendarz dostępności lekarzy -->
                 <div class="card" id="new-appointment" style="display: none;">
                     <div class="row">
                         <div class="col-md-8">
@@ -194,7 +215,7 @@ if (isset($_SESSION['$password_err'])) {
         </div>
     </div>
 
-
+    <!-- Sekcja z skryptami -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
     <script src='/gabinet/public/js/patient_panel.js'></script>
