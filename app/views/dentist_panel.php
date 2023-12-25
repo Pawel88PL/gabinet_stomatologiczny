@@ -7,17 +7,24 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION
     exit;
 }
 
+// Zaimportowanie pliku konfiguracyjnego bezy danych, modelu dentist i modelu availability
 require_once '../../config/database.php';
 require_once '../models/dentist.php';
 require_once '../models/availability.php';
 
-// Utworzenie obiektu bazy danych i dentysty
+// Utworzenie obiektu bazy danych
 $database = new Database();
 $db = $database->getConnection();
+
+// Utworzenie obiektu Dentist
 $dentist = new Dentist($db);
+
+// Utworzenie obiektu Availability
 $availability = new Availability($db);
 
+// Popbranie informacji o dostępności na podstawie ID dentysty
 $availabilityData = $availability->getAllAvailability($_SESSION['user_id']);
+// Pobranie danych dentysty o podanym ID
 $dentist_data = $dentist->getDentistById($_SESSION["user_id"]);
 
 if ($dentist_data === false) {
@@ -236,11 +243,13 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js" integrity="sha256-IW9RTty6djbi3+dyypxajC14pE6ZrP53DLfY9w40Xn4=" crossorigin="anonymous"></script>
     <script>
+        // Funkcja Java Script do usuwania dostępności
         document.querySelectorAll('.delete-availability-btn').forEach(button => {
             button.addEventListener('click', function(e) {
                 e.preventDefault();
                 const availabilityId = this.getAttribute('data-id');
 
+                // Wyświetl komunikat potwierdzający usunięcie dostępności
                 Swal.fire({
                     title: "Jesteś pewien?",
                     text: "Tej operacji nie można cofnąć.",
@@ -258,6 +267,7 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
             });
         });
 
+        // Funkcja Java Script do edycji dostępności
         document.querySelectorAll('.edit-availability-btn').forEach(button => {
             button.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -279,6 +289,7 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
             });
         });
 
+        // Funkcja do pokazywania/ukrywania sekcji
         function toggleSection(sectionId, show) {
             var section = document.getElementById(sectionId);
             if (section) {

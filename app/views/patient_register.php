@@ -1,13 +1,14 @@
 <?php
 
-session_start();
-// Na początku register_view.php
+session_start(); // Rozpoczęcie sesji
+
+// Zadeklarowanie zmiennych i ustawienie ich wartości na pusty ciąg znaków
 $first_name = $first_name_err = "";
 $last_name = $last_name_err = "";
 $email = $email_err = "";
-$password = $password_err = ""; // Jeśli używasz $password w widoku, co zazwyczaj się nie robi z hasłami
+$password = $password_err = "";
 
-// Następnie sprawdź, czy $viewData zostało ustawione
+// Sprawdzenie czy dane zostały ustawione i przypisanie ich do zmiennych
 if (isset($viewData)) {
     $first_name = $viewData['first_name'];
     $first_name_err = $viewData['first_name_err'];
@@ -37,6 +38,8 @@ if (isset($viewData)) {
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
+
+                <!-- Formularz rejestracji pacjenta -->
                 <div class="card my-5">
                     <div class="card-body">
                         <h2 class="card-title text-center mb-4">Formularz rejestracji</h2>

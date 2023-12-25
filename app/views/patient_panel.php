@@ -1,11 +1,13 @@
 <?php
-session_start();
+session_start(); // Inicjowanie sesji
 
+// Sprawdzanie, czy użytkownik jest zalogowany i ma rolę pacjenta
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["role"] !== 'patient') {
     header("location: patient_login.php");
     exit;
 }
 
+// Dołączenie pliku z konfiguracją połączenia z bazą danych i klasą Appointment
 require_once '../../config/database.php';
 require_once '../models/appointment.php';
 
@@ -19,13 +21,16 @@ $appointment = new Appointment($db);
 // Pobieranie wizyt pacjenta
 $patientAppointments = $appointment->getPatientAppointments($_SESSION['user_id']);
 
-
+// Utworzenie zmiennej z pustym ciągiem znaków
 $update_err = "";
+
+// Sprawdzanie, czy są błędy edycji danych
 if (isset($_SESSION['update_err'])) {
     $update_err = $_SESSION['update_err'];
     unset($_SESSION['update_err']); // Czyszczenie błędu z sesji
 }
 
+// Sprawdzanie, czy są błędy zmiany hasła
 $password_err = "";
 if (isset($_SESSION['$password_err'])) {
     $password_err = $_SESSION['$password_err'];
@@ -67,6 +72,7 @@ if (isset($_SESSION['$password_err'])) {
                     </div>
                 </div>
 
+                <!-- Tabela wizyt z możliwością sortowania i filtrowania -->
                 <div class="card">
                     <div class="row">
                         <div class="col-md-8">
@@ -87,7 +93,6 @@ if (isset($_SESSION['$password_err'])) {
                         </div>
                     </div>
 
-                    <!-- Tabela z możliwością sortowania po kliknięciu nagłówka -->
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover" id="appointments-table">
                             <thead class="table-light">
@@ -99,7 +104,7 @@ if (isset($_SESSION['$password_err'])) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Tutaj pojawia się tabela z danymi generowanymi dynamicznie z użyciem AJAX -->
+                                <!-- Tutaj pojawiają się dane generowane dynamicznie z użyciem AJAX -->
                             </tbody>
                         </table>
                     </div>
@@ -133,6 +138,7 @@ if (isset($_SESSION['$password_err'])) {
                             </div>
                         <?php endif; ?>
 
+                        <!-- Dane osobowe -->
                         <h2 class="card-title">Dane:</h2>
                         <div class="row mb-3">
                             <div class="col-lg-4">
@@ -148,6 +154,7 @@ if (isset($_SESSION['$password_err'])) {
                     </div>
                 </div>
 
+                <!-- Formularz edycji danych -->
                 <div class="card" id="edit-profile" style="display:none;">
                     <form action="../controllers/patient_update_controller.php" method="post" class="row g-3">
                         <div class="col-lg-4">
@@ -169,6 +176,7 @@ if (isset($_SESSION['$password_err'])) {
                     </form>
                 </div>
 
+                <!-- Formularz zmiany hasła -->
                 <div class="card" id="change-password" style="display:none;">
                     <form action="../controllers/patient_change_password_controller.php" method="post">
                         <div class="form-group">
@@ -190,6 +198,7 @@ if (isset($_SESSION['$password_err'])) {
                     </form>
                 </div>
 
+                <!-- Kalendarz dostępności lekarzy -->
                 <div class="card" id="new-appointment" style="display: none;">
                     <div class="row">
                         <div class="col-md-8">
@@ -206,7 +215,7 @@ if (isset($_SESSION['$password_err'])) {
         </div>
     </div>
 
-
+    <!-- Sekcja z skryptami -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
     <script src='/gabinet/public/js/patient_panel.js'></script>
