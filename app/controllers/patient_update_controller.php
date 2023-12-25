@@ -1,6 +1,4 @@
 <?php
-// Logowanie użycia kontrolera
-error_log("Formularz edycji danych został wysłany.");
 
 // Wyświetlenie informacji o błędach
 ini_set('display_errors', 1);
@@ -49,13 +47,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($update_err)) {
-        if ($patient->isEmailUsedByAnotherPatient($_SESSION['patient_id'], $email)) {
+        if ($patient->isEmailUsedByAnotherPatient($_SESSION['user_id'], $email)) {
             $_SESSION['update_err'] = "Podany adres email jest używany.";
             header("location: ../views/patient_panel.php");
             exit;
         }
 
-        if ($patient->updateProfile($_SESSION['patient_id'], $firstName, $lastName, $email)) {
+        if ($patient->updateProfile($_SESSION['user_id'], $firstName, $lastName, $email)) {
             // Aktualizacja danych w sesji
             $_SESSION["first_name"] = $firstName;
             $_SESSION["last_name"] = $lastName;

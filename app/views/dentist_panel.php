@@ -68,20 +68,27 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
 
                 <div class="card">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-sm-6">
                             <h2 id="appointmentsHeader"></h2>
                         </div>
-                        <div class="col-md-4">
-                            <div class="dropdown">
-                                <button class="btn btn-success dropdown-toggle w-100" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Filtruj wizyty
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="filterDropdown">
-                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('scheduled', false, 'zaplanowane:')">Zaplanowane</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_patient', false, 'odwołane przez pacjenta:')">Odwołane przez pacjenta</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_dentist', false, 'odwołane przez dentystę:')">Odwołane przez dentystę</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="loadAppointments('', false, 'wszystkie:')">Wszystkie</a></li>
-                                </ul>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-5">
+                                    <a href="../controllers/export_appointments_controller.php" class="btn btn-secondary w-100">CSV</a>
+                                </div>
+                                <div class="col-7">
+                                    <div class="dropdown">
+                                        <button class="btn btn-success dropdown-toggle w-100" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Filtruj wizyty
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                                            <li><a class="dropdown-item" href="#" onclick="loadAppointments('scheduled', false, 'zaplanowane:')">Zaplanowane</a></li>
+                                            <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_patient', false, 'odwołane przez pacjenta:')">Odwołane przez pacjenta</a></li>
+                                            <li><a class="dropdown-item" href="#" onclick="loadAppointments('cancelled_by_dentist', false, 'odwołane przez dentystę:')">Odwołane przez dentystę</a></li>
+                                            <li><a class="dropdown-item" href="#" onclick="loadAppointments('', false, 'wszystkie:')">Wszystkie</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -127,10 +134,10 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
                             </div>
                             <div class="col-sm-6">
                                 <div class="row">
-                                    <div class="col-6">
-                                        <a href="../controllers/export_availability_controller.php" class="btn btn-secondary w-100">Ekspor do CSV</a>
+                                    <div class="col-5">
+                                        <a href="../controllers/export_availability_controller.php" class="btn btn-secondary w-100">CSV</a>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-7">
                                         <button onclick="toggleSection('add-availability-section', true)" class="btn btn-primary w-100">Dodaj nową</button>
                                     </div>
                                 </div>
@@ -138,7 +145,7 @@ if (in_array($lastChar, ['a', 'e', 'i', 'o', 'u', 'y'])) {
                         </div>
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover">
-                                <thead>
+                                <thead class="table-light">
                                     <tr>
                                         <th>Czas rozpoczęcia</th>
                                         <th>Czas zakończenia</th>

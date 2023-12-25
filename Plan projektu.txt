@@ -34,8 +34,9 @@
    - Zaimplementować tabelę, która będzie wyświetlała umówione wizyty. --> ZROBIONE
    - Umożwilić anulowanie zaplanowanej wizyty przez dentysę. --> ZROBIONE
    - Dodać możwiwość filtrowania i sortowania wizyt.  --> ZROBIONE
-   - Dodać funkcję potwierdzenia przez dentystę, że wizyta się odbyła.
-   - Umożliwić pobranie wszystkich wizyt do pliku CSV.
+   - Zaimplementować funkcję, która automatycznie zmieni status wizyty zaplanowanej na wykonaną, jeśli czas zaplanowanej wizyty jest wcześniejszy o min 1 godzinę niż czas aktualny. --> ZROBIONE
+   - Dodać możliwość zmiany statusu wizyty z wykonanej na 'Pacjent nie stawił się'. --> ZROBIONE
+   - Umożliwić pobranie wszystkich wizyt do pliku CSV. --> ZROBIONE
 
 7. **Dokumentacja i komentarze projektu:**
    - Dokumentuj swój kod i procedury, aby ułatwić zarówno bieżące zarządzanie, jak i ewentualne przyszłe rozbudowy projektu.

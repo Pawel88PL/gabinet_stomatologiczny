@@ -69,6 +69,7 @@ class Patient
     public function updateProfile($patientId, $firstName, $lastName, $email)
     {
         if ($this->isEmailUsedByAnotherPatient($patientId, $email)) {
+            error_log("Podany adres email jest używany.");
             return false; // Email jest już używany
         }
 
@@ -94,8 +95,10 @@ class Patient
 
         // Wykonanie zapytania
         if ($stmt->execute()) {
+            error_log("Pacjent " . $_SESSION['first_name'] . " " . $_SESSION['last_name'] . " - zaktualizował dane osobowe.");
             return true;
         } else {
+            error_log("Błąd aktualizacji danych: " . implode(";", $stmt->errorInfo()));
             return false;
         }
     }
@@ -123,6 +126,7 @@ class Patient
                 $updateStmt->bindParam(':patient_id', $patientId);
 
                 if ($updateStmt->execute()) {
+                    error_log("Hasło zostało pomyślnie zaktualizowane.");
                     return true; // Hasło zostało pomyślnie zaktualizowane
                 }
                 if (!$updateStmt->execute()) {
