@@ -1,10 +1,15 @@
+
+// Oczekiwanie na załadowanie całej treści dokumentu
 document.addEventListener('DOMContentLoaded', async function () {
-    await updateAppointmentsStatus();
-    loadAppointments(undefined, true);
+    await updateAppointmentsStatus(); // Aktualizacja statusów wizyt
+    loadAppointments(undefined, true); // Ładowanie wizyt
 });
 
+// Funkcja, która anuluje wizytę
 function cancelAppointment(appointmentId) {
     Swal.fire({
+        // Wykorzystanie biblioteki SweetAlert2 do wyświetlenia okna dialogowego
+        // Konfiguracja okna dialogowego
         title: 'Czy na pewno chcesz odwołać wizytę?',
         icon: 'warning',
         showCancelButton: true,
@@ -15,6 +20,7 @@ function cancelAppointment(appointmentId) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
+                // Wywołanie AJAX do anulowania wizyty
                 url: '/gabinet/app/controllers/dentist_cancel_appointment.php',
                 type: 'POST',
                 data: { appointment_id: appointmentId },
@@ -39,7 +45,9 @@ function cancelAppointment(appointmentId) {
     });
 }
 
+// Funkcja, która zmienia status wizyty
 function changeAppointmentStatus(appointmentId, newStatus) {
+    // Wywołanie alertu z biblioteki SweetAlert2
     Swal.fire({
         title: 'Zmień status wizyty',
         text: `Potwierdź, że pacjent nie stawił się na wizytę`,
@@ -50,20 +58,24 @@ function changeAppointmentStatus(appointmentId, newStatus) {
         confirmButtonText: 'Tak, pacjenta nie było',
         cancelButtonText: 'Nie'
     }).then((result) => {
+        // Jeśli użytkownik potwierdził zmianę statusu
         if (result.isConfirmed) {
             $.ajax({
+                // Wysłanie zapytania AJAX do serwera
                 url: '/gabinet/app/controllers/appointment_change_status.php',
                 type: 'POST',
                 data: { appointment_id: appointmentId, new_status: newStatus },
                 success: function (response) {
+                    // Jeśli zapytanie zakończyło się sukcesem to wyświetl komunikat
                     const data = JSON.parse(response);
                     Swal.fire(
                         'Zmieniono!',
                         data.message,
                         'success'
                     );
-                    loadAppointments();
+                    loadAppointments(); // Ponowne załadowanie wizyt
                 },
+                // Jeśli zapytanie zakończyło się błędem to wyświetl komunikat
                 error: function (error) {
                     Swal.fire(
                         'Błąd!',
@@ -76,18 +88,21 @@ function changeAppointmentStatus(appointmentId, newStatus) {
     });
 }
 
-
+// Zadeklarowanie zmiennej globalnej, która będzie przechowywać wszystkie wizyty
 var globalAppointments = [];
 
+// Funkcja, która ładuje wizyty
 function loadAppointments(filterStatus = 'scheduled', isInitialLoad = false, filterText = 'zaplanowane') {
     document.getElementById('appointmentsHeader').textContent = 'Wizyty ' + filterText;
     $.ajax({
+        // Wysłanie zapytania AJAX do serwera
         url: '/gabinet/app/controllers/get_dentist_appointments.php',
         type: 'GET',
         success: function (response) {
+            // Jeśli zapytanie zakończyło się sukcesem to zapisz wizyty do zmiennej globalnej
             globalAppointments = JSON.parse(response);
             var statusToFilter = isInitialLoad ? 'scheduled' : filterStatus;
-            renderTable(globalAppointments, statusToFilter);
+            renderTable(globalAppointments, statusToFilter); // Wywołanie funkcji, która wyświetla wizyty w tabeli
         },
         error: function (error) {
             console.log('Błąd podczas ładowania wizyt', error);
@@ -95,9 +110,11 @@ function loadAppointments(filterStatus = 'scheduled', isInitialLoad = false, fil
     });
 }
 
+// Funkcja, która sortuje wizyty
 function sortAppointments(sortKey) {
-    var sortedAppointments = [...globalAppointments];
+    var sortedAppointments = [...globalAppointments]; // Skopiowanie wszystkich wizyt do nowej tablicy
     sortedAppointments.sort(function (a, b) {
+        // Sortowanie wizyt po dacie lub nazwisku pacjenta
         if (sortKey === 'date') {
             return new Date(a.appointment_date) - new Date(b.appointment_date);
         } else if (sortKey === 'patient') {
@@ -107,6 +124,7 @@ function sortAppointments(sortKey) {
     renderTable(sortedAppointments);
 }
 
+// Funkcja, która filtruje wizyty
 function renderTable(appointments, filterStatus = 'scheduled') {
     var html = '';
     appointments.forEach(function (appointment) {
@@ -117,9 +135,12 @@ function renderTable(appointments, filterStatus = 'scheduled') {
             html += '<td>' + appointment.first_name + ' ' + appointment.last_name + '</td>';
             html += '<td>' + formatAppointmentStatus(appointment.status) + '</td>';
 
+            // Jeśli wizyta jest zaplanowana, dodaj przycisk do anulowania wizyty
             if (appointment.status === 'scheduled') {
                 html += '<td><button class="btn btn-danger" onclick="cancelAppointment(' + appointment.appointment_id + ')">Odwołaj</button></td>';
-            } else if (appointment.status === 'completed') {
+            }
+            // Jeśli wizyta jest wykonana, dodaj przycisk do zmiany statusu na "Pacjent nie stawił się"
+            else if (appointment.status === 'completed') {
                 html += '<td><button class="btn btn-warning" onclick="changeAppointmentStatus(' + appointment.appointment_id + ', \'no_show\')">Pacjent nie stawił się</button></td>';
             } else {
                 html += '<td></td>'; // Puste pole dla pozostałych statusów
@@ -150,8 +171,10 @@ function formatAppointmentStatus(status) {
     }
 }
 
+// Asynchroniczna funkcja, która aktualizuje statusy wizyt
 async function updateAppointmentsStatus() {
     try {
+        // Wysłanie zapytania do serwera
         const response = await fetch('/gabinet/app/controllers/update_appointments_status.php', {
             method: 'POST',
             headers: {
@@ -159,14 +182,17 @@ async function updateAppointmentsStatus() {
             }
         });
 
-        const data = await response.json();
+        const data = await response.json(); // Przypisanie odpowiedzi do zmiennej
 
+        // Jeśli zapytanie zakończyło się sukcesem, wyświetl komunikat w konsoli
         if (data.success) {
             console.log(data.message);
         } else {
+            // Jeśli zapytanie zakończyło się błędem, wyświetl komunikat w konsoli
             console.error(data.error || 'Nieznany błąd');
         }
     } catch (error) {
+        // Jeśli wystąpił błąd podczas komunikacji z serwerem, wyświetl komunikat w konsoli
         console.error('Wystąpił błąd podczas komunikacji z serwerem:', error);
     }
 }

@@ -1,12 +1,15 @@
 
-var calendar;
+var calendar; // Zmienna globalna przechowująca kalendarz
 
+
+// Funkcja, która zmienia widoczność sekcji
 function toggleSection(sectionId, show) {
     var section = document.getElementById(sectionId);
     if (section) {
         section.style.display = show ? 'block' : 'none';
 
         if (show) {
+            // Jeśli sekcja ma być widoczna, przewiń do niej i zainicjalizuj kalendarz z opóźnieniem 500ms
             setTimeout(() => {
                 initializeCalendar();
             }, 500);
@@ -17,7 +20,7 @@ function toggleSection(sectionId, show) {
     }
 }
 
-
+// Funkcja, która inicjalizuje kalendarz
 function initializeCalendar() {
     var calendarEl = document.getElementById('calendar');
     var patientId = calendarEl.getAttribute('data-patient-id');
@@ -29,11 +32,12 @@ function initializeCalendar() {
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
+            // Funkcja, która pobiera wydarzenia z serwera
             events: function (fetchInfo, successCallback, failureCallback) {
                 fetch('/gabinet/app/controllers/get_availability.php')
                     .then(response => response.json())
                     .then(data => {
-                        const events = data.map(item => {
+                        const events = data.map(item => { // Mapowanie danych z serwera na format wydarzenia
                             return {
                                 title: item.first_name + ' ' + item.last_name,
                                 start: item.start_time,
@@ -44,10 +48,11 @@ function initializeCalendar() {
                                 }
                             };
                         });
-                        successCallback(events);
+                        successCallback(events); // Wywołanie funkcji successCallback z wydarzeniami jako parametrem
                     })
                     .catch(error => failureCallback(error));
             },
+            // Funkcja, która wyświetla komunikat po kliknięciu w wydarzenie
             eventClick: function (info) {
                 const prettyDate = new Date(info.event.start).toLocaleString('pl-PL', {
                     year: 'numeric',
@@ -56,7 +61,7 @@ function initializeCalendar() {
                     hour: '2-digit',
                     minute: '2-digit'
                 });
-
+                // Wyświetlenie komunikatu z potwierdzeniem rezerwacji
                 Swal.fire({
                     title: 'Potwierdź rezerwację',
                     text: 'Czy chcesz zarezerwować wizytę u ' + info.event.title + ' dnia ' + prettyDate + '?',
@@ -68,31 +73,30 @@ function initializeCalendar() {
                     cancelButtonText: 'Anuluj'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Logika rezerwacji
-                        const appointmentData = {
+                        const appointmentData = { // Dane wizyty
                             dentist_id: info.event.extendedProps.dentist_id,
                             appointment_date: info.event.startStr,
                             patient_id: patientId
                         };
-
+                        // Jeśli użytkownik potwierdził rezerwację, wyślij zapytanie do serwera
                         fetch('/gabinet/app/controllers/create_appointment.php', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
-                            body: JSON.stringify(appointmentData)
+                            body: JSON.stringify(appointmentData) // Dane wizyty w formacie JSON
                         }).then(response => response.json()).then(data => {
-                            // Tu obsługa odpowiedzi od serwera
+                            // Jeśli zapytanie zakończyło się sukcesem, wyświetl komunikat
                             Swal.fire({
                                 title: 'Rezerwacja potwierdzona',
                                 text: 'Twoja wizyta została zarezerwowana.',
                                 icon: 'success'
                             }).then(() => {
-                                refreshCalendar();
-                                loadAppointments();
+                                refreshCalendar(); // Odśwież kalendarz
+                                loadAppointments(); // Odśwież tabelę z wizytami
                             });
                         }).catch(error => {
-                            // Tu obsługa błędów
+                            // Jeśli zapytanie zakończyło się błędem, wyświetl komunikat
                             Swal.fire({
                                 title: 'Błąd rezerwacji',
                                 text: 'Nie udało się zarezerwować wizyty.',
@@ -104,20 +108,24 @@ function initializeCalendar() {
             }
         });
     }
-    calendar.render();
+    calendar.render(); // Wyświetlenie kalendarza
 }
 
+// Funkcja, która odświeża kalendarz
 function refreshCalendar() {
     if (calendar) {
         calendar.refetchEvents();
     }
 }
 
+// Załadowanie wizyt po załadowaniu strony
 document.addEventListener('DOMContentLoaded', function () {
     loadAppointments(undefined, true);
 });
 
+// Funkcja, która anuluje wizytę
 function cancelAppointment(appointmentId) {
+    // Wykorzystanie biblioteki SweetAlert2 do wyświetlenia komunikatu
     Swal.fire({
         title: 'Czy na pewno chcesz odwołać zaplanowaną wizytę?',
         icon: 'warning',
@@ -128,21 +136,24 @@ function cancelAppointment(appointmentId) {
         cancelButtonText: 'Nie'
     }).then((result) => {
         if (result.isConfirmed) {
+            // Jeśli użytkownik potwierdził anulowanie wizyty, wyślij zapytanie do serwera
             $.ajax({
                 url: '/gabinet/app/controllers/patient_cancel_appointment.php',
                 type: 'POST',
                 data: { appointment_id: appointmentId },
                 success: function (response) {
+                    // Jeśli zapytanie zakończyło się sukcesem, wyświetl komunikat
                     const data = JSON.parse(response);
                     Swal.fire(
                         'Odwołano!',
                         data.message,
                         'success'
                     );
-                    loadAppointments();
-                    refreshCalendar();
+                    loadAppointments(); // Odśwież tabelę z wizytami
+                    refreshCalendar(); // Odśwież kalendarz
                 },
                 error: function (error) {
+                    // Jeśli zapytanie zakończyło się błędem, wyświetl komunikat
                     Swal.fire(
                         'Błąd!',
                         'Nie udało się anulować wizyty.',
@@ -154,15 +165,19 @@ function cancelAppointment(appointmentId) {
     });
 }
 
-var globalAppointments = []; // Przechowuje wszystkie wizyty
+// Zadeklarowanie zmiennej globalnej przechowującej wizyty
+var globalAppointments = [];
 
+// Funkcja, która pobiera wizyty z serwera
 function loadAppointments(filterStatus = 'scheduled', isInitialLoad = false, filterText = 'zaplanowane:') {
     document.getElementById('appointmentsHeader').textContent = 'Wizyty ' + filterText;
     $.ajax({
+        // Wysłanie zapytania AJAX do serwera
         url: '/gabinet/app/controllers/get_patient_appointments.php',
         type: 'GET',
         success: function (response) {
             globalAppointments = JSON.parse(response);
+            // Jeśli to pierwsze załadowanie, wyświetl tabelę z wizytami ze statusem 'zaplanowane'
             var statusToFilter = isInitialLoad ? 'scheduled' : filterStatus;
             renderTable(globalAppointments, statusToFilter);
         },
@@ -172,6 +187,8 @@ function loadAppointments(filterStatus = 'scheduled', isInitialLoad = false, fil
     });
 }
 
+
+// Funkcja, która sortuje wizyty
 function sortAppointments(sortKey) {
     var sortedAppointments = [...globalAppointments];
     sortedAppointments.sort(function (a, b) {
@@ -184,6 +201,7 @@ function sortAppointments(sortKey) {
     renderTable(sortedAppointments);
 }
 
+// Funkcja, która tworzy tabelę z wizytami
 function renderTable(appointments, filterStatus = 'scheduled') {
     var html = '';
     appointments.forEach(function (appointment) {
@@ -205,7 +223,7 @@ function renderTable(appointments, filterStatus = 'scheduled') {
 }
 
 
-// Funkcja pomocnicza do formatowania statusu wizyty
+// Funkcja pomocnicza do formatowania statusu wizyty na język polski
 function formatAppointmentStatus(status) {
     switch (status) {
         case 'scheduled':
@@ -223,6 +241,7 @@ function formatAppointmentStatus(status) {
     }
 }
 
+// Funkcja, która odświeża kalendarz
 function refreshCalendar() {
     if (calendar) {
         calendar.refetchEvents();
