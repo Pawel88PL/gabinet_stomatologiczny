@@ -1,10 +1,10 @@
 <?php
 class Database
 {
-    private $host = "h22.seohost.pl";
-    private $db_name = "srv40917_stomatologia";
-    private $username = "srv40917_stomatologia";
-    private $password = "php2023";
+    private $host = "localhost";
+    private $db_name = "stomatologia";
+    private $username = "root";
+    private $password = "";
     public $conn;
 
     public function getConnection()
