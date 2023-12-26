@@ -1,4 +1,5 @@
 # Aplikacja Zarządzania Kliniką Dentystyczną
+![image](https://github.com/Pawel88PL/gabinet_stomatologiczny/assets/97385295/21e1ea88-c659-438e-bd89-59b9d38a5ea6)
 
 ## Opis
 Aplikacja Zarządzania Kliniką Dentystyczną to kompleksowe narzędzie przeznaczone do zarządzania wizytami, dostępnością, a także profilami pacjentów i personelu w klinice dentystycznej. Umożliwia efektywne planowanie, monitorowanie i śledzenie wizyt dentystycznych dla zarówno pacjentów, jak i personelu kliniki.
