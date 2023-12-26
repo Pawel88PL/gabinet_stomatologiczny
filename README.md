@@ -24,3 +24,8 @@ Aplikacja Zarządzania Kliniką Dentystyczną to kompleksowe narzędzie przeznac
 
 ## Bezpieczeństwo
 Aplikacja stosuje standardowe praktyki bezpieczeństwa, takie jak hashowanie haseł, przygotowane zapytania SQL, walidacja i sanitacja danych wejściowych, aby chronić przed zagrożeniami takimi jak SQL Injection i XSS.
+
+![image](https://github.com/Pawel88PL/gabinet_stomatologiczny/assets/97385295/3f410afa-75d6-4966-b162-a9fdaba33873)
+
+![image](https://github.com/Pawel88PL/gabinet_stomatologiczny/assets/97385295/49a2a5f4-9fed-4317-9124-443172486266)
+
