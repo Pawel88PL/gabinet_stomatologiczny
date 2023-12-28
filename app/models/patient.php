@@ -13,6 +13,43 @@ class Patient
     }
 
     // Funkcja, która logiuje pacjenta
+    public function addNewPatient($firstName, $lastName, $email, $password)
+    {
+        // Sprawdzenie, czy email już istnieje
+        if ($this->isEmailExists($email)) {
+            error_log("Email " . $email . " już istnieje w bazie danych.");
+            return false; // Adres email już istnieje
+        }
+
+        // Zapytanie SQL do wstawienia danych
+        $query = "INSERT INTO " . $this->table_name . " (first_name, last_name, email, password) VALUES (:first_name, :last_name, :email, :password)";
+
+        // Przygotowanie zapytania
+        $stmt = $this->db->prepare($query);
+
+        // Oczyszczenie i bindowanie
+        $firstName = htmlspecialchars(strip_tags($firstName));
+        $lastName = htmlspecialchars(strip_tags($lastName));
+        $email = htmlspecialchars(strip_tags($email));
+        $passwordHashed = password_hash($password, PASSWORD_DEFAULT); // Hashowanie hasła
+
+        // Przypisanie wartości do zapytania
+        $stmt->bindParam(':first_name', $firstName);
+        $stmt->bindParam(':last_name', $lastName);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':password', $passwordHashed);
+
+        // Wykonanie zapytania
+        if ($stmt->execute()) {
+            error_log("Pacjent " . $firstName . " " . $lastName . " został dodany do bazy danych.");
+            return true; // Powodzenie dodania
+        } else {
+            error_log("Błąd dodawania pacjenta: " . implode(";", $stmt->errorInfo()));
+            return false; // Niepowodzenie dodania
+        }
+    }
+
+    // Funkcja, która logiuje pacjenta
     public function login($email, $password)
     {
         // Zapytanie SQL do pobrania informacji o pacjentach na podstawie emaila
@@ -54,6 +91,24 @@ class Patient
         } else {
             return false; // Nie znaleziono użytkownika o podanym adresie email
         }
+    }
+
+    // Funkcja, która sprawdza czy email jest już używany
+    public function isEmailExists($email)
+    {
+        // Zapytanie SQL do sprawdzenia, czy email jest już używany
+        $query = "SELECT COUNT(*) FROM " . $this->table_name . " WHERE email = :email";
+
+        // Przygotowanie zapytania
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':email', $email);
+
+        // Wykonanie zapytania
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
+
+        // Jeśli count > 0, email już istnieje
+        return $count > 0;
     }
 
     // Funkcja, która sprawdza czy email jest już używany przez innego pacjenta

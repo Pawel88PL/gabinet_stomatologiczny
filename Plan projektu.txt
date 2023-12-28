@@ -32,8 +32,8 @@
 
 6. Panel dentysty:
    - Zaimplementować tabelę, która będzie wyświetlała umówione wizyty. --> ZROBIONE
-   - Umożwilić anulowanie zaplanowanej wizyty przez dentysę. --> ZROBIONE
-   - Dodać możwiwość filtrowania i sortowania wizyt.  --> ZROBIONE
+   - Umożliwić anulowanie zaplanowanej wizyty przez dentysę. --> ZROBIONE
+   - Dodać możliwość filtrowania i sortowania wizyt.  --> ZROBIONE
    - Zaimplementować funkcję, która automatycznie zmieni status wizyty zaplanowanej na wykonaną, jeśli czas zaplanowanej wizyty jest wcześniejszy o min 1 godzinę niż czas aktualny. --> ZROBIONE
    - Dodać możliwość zmiany statusu wizyty z wykonanej na 'Pacjent nie stawił się'. --> ZROBIONE
    - Umożliwić pobranie wszystkich wizyt do pliku CSV. --> ZROBIONE
