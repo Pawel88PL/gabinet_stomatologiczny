@@ -25,6 +25,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $patient_id = $_SESSION['user_id'];
     $dentist_id = $data['dentist_id'] ?? null;
     $appointment_date = $data['appointment_date'] ?? null;
+    if ($appointment_date) {
+        $dateTime = new DateTime($appointment_date);
+        $formattedDate = $dateTime->format('Y-m-d H:i:s');
+        $appointment_date = $formattedDate;
+    }
 
     try {
         // Utworzenie nowego połączenia z bazą danych
